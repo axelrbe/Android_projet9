@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primaryPurple">#5D1049</color>
+    <color name="secondaryPurple">#4E0D3A</color>
+    <color name="thirdPurple">#720D5D</color>
+    <color name="craneRed">#E30425</color>
+    <color name="grayedText">#B6B6B6</color>
 </resources>

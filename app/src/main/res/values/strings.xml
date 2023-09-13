@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+    <string name="app_title">Real Estate Manager</string>
+    <string name="search_icon">Search icon</string>
+    <string name="menu_button_description">menu icon</string>
+    <string name="add_property_type">Type</string>
+    <string name="add_property_price">Prix</string>
+    <string name="add_property_surface">Surface</string>
+    <string name="add_property_rooms">Chambres</string>
+    <string name="add_property_desc">Description</string>
+    <string name="add_property_photos">Ajouter des photos +</string>
+    <string name="add_property_address">Adresse</string>
+    <string name="add_property_date">Date d\'ajout</string>
+    <string name="appartment">Un appartement</string>
+    <string name="house">Une maison</string>
+    <string name="loft">Un loft</string>
+    <string name="studio">Un studio</string>
+    <string name="mansion">Un manoir</string>
+    <string name="indeterminate">Indéterminé</string>
+    <string name="add_property_btn">Ajouter ce bien</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/type_popup_apartment"
+        android:title="@string/appartment" />
+    <item
+        android:id="@+id/type_popup_house"
+        android:title="@string/house" />
+    <item
+        android:id="@+id/type_popup_loft"
+        android:title="@string/loft" />
+    <item
+        android:id="@+id/type_popup_studio"
+        android:title="@string/studio" />
+    <item
+        android:id="@+id/type_popup_mansion"
+        android:title="@string/mansion" />
+    <item
+        android:id="@+id/type_popup_indeterminate"
+        android:title="@string/indeterminate" />
+</menu>
