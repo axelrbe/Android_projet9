@@ -27,7 +27,7 @@ object Utils {
          * @return
          */
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
+            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy")
             return dateFormat.format(Date())
         }
 

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
     defaultConfig {
+        compileSdk = 34
         applicationId "com.openclassrooms.realestatemanager"
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -42,7 +42,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'io.coil-kt:coil:1.4.0'
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 }

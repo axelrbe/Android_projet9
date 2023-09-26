@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context="com.openclassrooms.realestatemanager.MainActivity">
+    tools:context="com.openclassrooms.realestatemanager.ui.MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -65,224 +65,27 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/secondaryPurple"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            android:background="@color/secondaryPurple">
 
-            <LinearLayout
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/property_list_fragment"
+                android:name="com.openclassrooms.realestatemanager.fragments.PropertyListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                tools:layout="@layout/fragment_property_list" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginEnd="45dp">
-
-                    <Button
-                        android:id="@+id/add_property_type"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/rounded_background"
-                        android:drawableStart="@drawable/icon_house"
-                        android:drawablePadding="10dp"
-                        android:padding="15dp"
-                        android:gravity="start"
-                        android:text="@string/add_property_type"
-                        android:textAllCaps="false"
-                        android:textColor="@color/grayedText"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/add_property_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/add_property_price"
-                        android:textColorHint="@color/grayedText"
-                        android:autofillHints="input"
-                        android:inputType="number"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_background"
-                        android:padding="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:drawableStart="@drawable/icon_euro"
-                        android:drawablePadding="10dp"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="45dp">
-
-                <EditText
-                    android:id="@+id/add_property_surface"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/add_property_surface"
-                    android:textColorHint="@color/grayedText"
-                    android:autofillHints="input"
-                    android:inputType="text"
-                    android:textStyle="bold"
-                    android:background="@drawable/rounded_background"
-                    android:padding="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:drawableStart="@drawable/icon_surface"
-                    android:drawablePadding="10dp"
-                    android:layout_weight="1"/>
-
-                <EditText
-                    android:id="@+id/add_property_rooms"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/add_property_rooms"
-                    android:textColorHint="@color/grayedText"
-                    android:autofillHints="input"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:background="@drawable/rounded_background"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableStart="@drawable/icon_bed"
-                    android:drawablePadding="10dp"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
-                <Button
-                    android:id="@+id/add_property_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_property_desc"
-                    android:textColor="@color/grayedText"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:background="@drawable/rounded_background"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableStart="@drawable/icon_desc"/>
-
-                <Button
-                    android:id="@+id/add_property_photos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_property_photos"
-                    android:textColor="@color/grayedText"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:background="@drawable/rounded_background"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableStart="@drawable/icon_photo"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginEnd="45dp">
-
-                    <EditText
-                        android:id="@+id/add_property_address"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/add_property_address"
-                        android:textColorHint="@color/grayedText"
-                        android:autofillHints="input"
-                        android:inputType="text"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_background"
-                        android:gravity="center"
-                        android:padding="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:drawableStart="@drawable/icon_address"
-                        android:layout_weight="1"/>
-
-                    <EditText
-                        android:id="@+id/add_property_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/add_property_date"
-                        android:textColorHint="@color/grayedText"
-                        android:autofillHints="input"
-                        android:inputType="date"
-                        android:textStyle="bold"
-                        android:background="@drawable/rounded_background"
-                        android:gravity="center"
-                        android:padding="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:drawableStart="@drawable/icon_date"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/add_property_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:background="@drawable/rounded_background"
-                    android:backgroundTint="@color/white"
-                    android:drawableEnd="@drawable/icon_send"
-                    android:drawablePadding="28dp"
-                    android:padding="15dp"
-                    android:layout_gravity="center"
-                    android:text="@string/add_property_btn"
-                    android:textAllCaps="false"
-                    android:textColor="@color/primaryPurple"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/properties_recycler_view_container"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/form_fragment"
+                android:name="com.openclassrooms.realestatemanager.fragments.FormFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="20dp">
+                tools:layout="@layout/fragment_form" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/properties_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"/>
-
-            </androidx.cardview.widget.CardView>
-
-
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
     </LinearLayout>
 

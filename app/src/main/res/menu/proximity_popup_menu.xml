@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/proximity_popup_collège"
+        android:title="@string/college" />
+    <item
+        android:id="@+id/proximity_popup_lycée"
+        android:title="@string/lycee" />
+    <item
+        android:id="@+id/proximity_popup_primaire"
+        android:title="@string/primary" />
+    <item
+        android:id="@+id/proximity_popup_garderie"
+        android:title="@string/garderie" />
+    <item
+        android:id="@+id/proximity_popup_commerce"
+        android:title="@string/shops" />
+    <item
+        android:id="@+id/proximity_popup_supermarket"
+        android:title="@string/supermarket" />
+    <item
+        android:id="@+id/proximity_popup_parc"
+        android:title="@string/parc" />
+    <item
+        android:id="@+id/proximity_popup_sea"
+        android:title="@string/sea" />
+    <item
+        android:id="@+id/proximity_popup_activities"
+        android:title="@string/activities" />
+</menu>

@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/thirdPurple</item>
     </style>
 
+    <!-- Rounded image style. -->
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+    </style>
+
 </resources>
