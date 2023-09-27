@@ -3,9 +3,7 @@ package com.openclassrooms.realestatemanager.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -22,10 +20,16 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.Utils
-import com.openclassrooms.realestatemanager.adapters.PropertiesAdapter
+import com.openclassrooms.realestatemanager.application.RealEstateApplication
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.repositories.PropertyRepository
+import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
+import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
 
 class FormFragment : Fragment() {
 
@@ -42,15 +46,15 @@ class FormFragment : Fragment() {
     private lateinit var addProximityPlacesListView: ListView
     private lateinit var realEstateAgentPropertyBtn: EditText
     private lateinit var addPropertyBtn: Button
-    private lateinit var listener: OnPropertyAddedListener
-
-    interface OnPropertyAddedListener {
-        fun onPropertyAdded(property: Property)
-    }
+    private lateinit var propertyDao: PropertyDao
+    private lateinit var propertyViewModel: PropertyViewModel
+    private lateinit var propertyRepository: PropertyRepository
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as OnPropertyAddedListener
+        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
+        propertyRepository = PropertyRepository(propertyDao)
+        propertyViewModel = ViewModelProvider(requireActivity(), PropertyViewModelFactory(propertyRepository, requireActivity().application))[PropertyViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,7 +75,8 @@ class FormFragment : Fragment() {
         addPropertyBtn = view.findViewById(R.id.add_property_btn)
 
         addPropertyPhotosBtn.setOnClickListener {
-            val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            pickImg.type = "image/*"
             getImageFromGallery.launch(pickImg)
         }
 
@@ -90,7 +95,7 @@ class FormFragment : Fragment() {
             val propertySurface: Long = surfacePropertyBtn.text.toString().toLong()
             val propertyRooms: Int = roomsPropertyBtn.text.toString().toInt()
             val propertyDesc: String = descPropertyBtn.text.toString()
-            val propertyPhotos: List<Uri?> = selectedPhotos
+            val propertyPhotos: List<String> = selectedPhotos
             val propertyAddress: String = addressPropertyBtn.text.toString()
             val propertyRealEstateAgent: String = realEstateAgentPropertyBtn.text.toString()
             val todayDate = Utils.todayDate
@@ -102,13 +107,24 @@ class FormFragment : Fragment() {
             }
             val propertyProximityPlaces: List<String> = allProximityPlaces
 
-            val newProperty = Property(propertyType, propertyPrice, propertySurface, propertyRooms, propertyDesc,
-                propertyPhotos, propertyAddress, propertyProximityPlaces, getString(R.string.property_for_sale),
-                todayDate, null, propertyRealEstateAgent)
+            val newProperty = Property(
+                type = propertyType,
+                price = propertyPrice,
+                surface = propertySurface,
+                rooms = propertyRooms,
+                desc = propertyDesc,
+                photos = propertyPhotos,
+                address = propertyAddress,
+                proximityPlaces = propertyProximityPlaces,
+                status = getString(R.string.property_for_sale),
+                entryDate = todayDate,
+                soldDate = null,
+                realEstateAgent = propertyRealEstateAgent
+            )
 
             try {
-                listener.onPropertyAdded(newProperty)
-                typePropertyBtn.text = ""
+                propertyViewModel.addProperty(newProperty)
+                "Type".also { typePropertyBtn.text = it }
                 pricePropertyBtn.setText("")
                 surfacePropertyBtn.setText("")
                 roomsPropertyBtn.setText("")
@@ -195,13 +211,14 @@ class FormFragment : Fragment() {
             }
         })
     }
-    private val selectedPhotos = ArrayList<Uri?>()
+
+    private val selectedPhotos = ArrayList<String>()
     private val getImageFromGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 val data = it.data
                 val imgUri = data?.data
-                selectedPhotos.add(imgUri)
+                selectedPhotos.add(imgUri.toString())
                 updateSelectedPhotos()
             }
         }
@@ -211,7 +228,9 @@ class FormFragment : Fragment() {
         selectedPhotosLayout.removeAllViews()
         for (photo in selectedPhotos) {
             val imageView = ImageView(context)
-            imageView.setImageURI(photo)
+            Glide.with(imageView)
+                .load(photo)
+                .into(imageView)
             imageView.layoutParams = LinearLayout.LayoutParams(200, 200)
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             selectedPhotosLayout.addView(imageView)

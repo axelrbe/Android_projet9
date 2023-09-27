@@ -1,8 +1,22 @@
 package com.openclassrooms.realestatemanager.models
 
-import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.Date
 
-data class Property(val type: String, val price: Long, val surface: Long, val numberOfRooms: Int, val desc: String,
-val photos: List<Uri?>, val address: String, val proximityPlaces: List<String>, val status: String,
-                    val entryDate: String, val sellDate: Date?, val realEstateAgent: String)
+@Entity(tableName = "properties")
+data class Property(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val type: String,
+    val price: Long,
+    val surface: Long,
+    val rooms: Int,
+    val desc: String,
+    val photos: List<String>,
+    val address: String,
+    val proximityPlaces: List<String>,
+    val status: String,
+    val entryDate: String,
+    val soldDate: Date?,
+    val realEstateAgent: String
+)

@@ -3,14 +3,12 @@ package com.openclassrooms.realestatemanager.ui
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.fragments.FormFragment
 import com.openclassrooms.realestatemanager.fragments.PropertyListFragment
-import com.openclassrooms.realestatemanager.models.Property
 
-class MainActivity : AppCompatActivity(), FormFragment.OnPropertyAddedListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var headerAddPropertyBtn: ImageButton
     private lateinit var propertyListFragment: PropertyListFragment
@@ -59,10 +57,5 @@ class MainActivity : AppCompatActivity(), FormFragment.OnPropertyAddedListener {
 
             fragmentTransaction.commit()
         }
-    }
-
-    override fun onPropertyAdded(property: Property) {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as PropertyListFragment
-        listFragment.onPropertyAdded(property)
     }
 }

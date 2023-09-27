@@ -1,10 +1,15 @@
-package com.openclassrooms.realestatemanager
+package com.openclassrooms.realestatemanager.utils
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
+import android.os.Build
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import kotlin.math.roundToInt
 
 /**
  * Created by Philippe on 21/02/2018.
@@ -17,7 +22,11 @@ object Utils {
      * @return
      */
     fun convertDollarToEuro(dollars: Int): Int {
-        return Math.round(dollars * 0.812).toInt()
+        return (dollars * 0.94345).roundToInt()
+    }
+
+    fun convertEuroToDollar(euros: Int): Int {
+        return (euros * 1.32030).roundToInt()
     }
 
     val todayDate: String
@@ -27,7 +36,7 @@ object Utils {
          * @return
          */
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             return dateFormat.format(Date())
         }
 
@@ -37,8 +46,12 @@ object Utils {
      * @param context
      * @return
      */
-    fun isInternetAvailable(context: Context): Boolean {
-        val wifi = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        return wifi.isWifiEnabled
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }

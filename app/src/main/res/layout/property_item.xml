@@ -186,6 +186,7 @@
                     android:id="@+id/property_item_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:ellipsize="marquee"
                     android:maxLines="1"
                     android:padding="2dp"
@@ -194,8 +195,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textAlignment="textStart"
-                    android:layout_weight="1"
-                    app:drawableEndCompat="@drawable/icon_dropdown" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/property_item_status_date"

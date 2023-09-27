@@ -4,23 +4,24 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.models.Property
 
-class PropertiesAdapter(private val properties: MutableList<Property>) : RecyclerView.Adapter<PropertiesAdapter.PropertiesViewHolder>(){
+class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
 
-    class PropertiesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertiesViewHolder {
-        return PropertiesViewHolder((LayoutInflater.from(parent.context).inflate(R.layout.property_item, parent, false)))
+    class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
+        return PropertyViewHolder((LayoutInflater.from(parent.context).inflate(R.layout.property_item, parent, false)))
     }
 
-    override fun onBindViewHolder(holder: PropertiesViewHolder, position: Int) {
-        val currentProperty = properties[position]
+    override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
+        val currentProperty = getItem(position)
         holder.itemView.apply {
             val propertyItemType = findViewById<TextView>(R.id.property_item_type)
             val propertyItemPrice = findViewById<TextView>(R.id.property_item_price)
@@ -36,7 +37,7 @@ class PropertiesAdapter(private val properties: MutableList<Property>) : Recycle
             propertyItemType.text = currentProperty.type
             "${currentProperty.price}€".also { propertyItemPrice.text = it }
             """${currentProperty.surface}m²""".also { propertyItemSurface.text = it }
-            "${currentProperty.numberOfRooms} Chambres".also { propertyItemRooms.text = it }
+            "${currentProperty.rooms} Chambres".also { propertyItemRooms.text = it }
             propertyItemDesc.text = currentProperty.desc
             propertyItemDate.text = currentProperty.entryDate
             propertyItemAddress.text = currentProperty.address
@@ -45,14 +46,20 @@ class PropertiesAdapter(private val properties: MutableList<Property>) : Recycle
             val proximityPlacesList: String = TextUtils.join(", ", currentProperty.proximityPlaces)
             propertyItemProximityPlaces.text = proximityPlacesList
 
-            currentProperty.photos.firstOrNull()?.let { photoUri ->
-                propertyItemPhoto.scaleType = ImageView.ScaleType.CENTER_CROP
-                propertyItemPhoto.load(photoUri)
-            }
+            Glide.with(holder.itemView)
+                .load(currentProperty.photos[0])
+                .centerCrop()
+                .into(propertyItemPhoto)
         }
     }
 
-    override fun getItemCount(): Int {
-        return properties.size
+    private class DiffCallback : DiffUtil.ItemCallback<Property>() {
+        override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean {
+            return oldItem == newItem
+        }
     }
 }
