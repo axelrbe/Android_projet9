@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
-    <string name="app_title">Real Estate Manager</string>
     <string name="search_icon">Search icon</string>
     <string name="menu_button_description">menu icon</string>
     <string name="add_property_type">Type</string>
@@ -18,7 +17,7 @@
     <string name="mansion">Manoir</string>
     <string name="indeterminate">Indéterminé</string>
     <string name="add_property_btn">Ajouter ce bien</string>
-    <string name="add_property_proximity">Point d\'intérets à proxomité</string>
+    <string name="add_property_proximity">Point d\'intérets à proxomité:</string>
     <string name="add_property_status">Status</string>
     <string name="property_status">status of the property</string>
     <string name="add_property_status_date">le</string>
@@ -40,4 +39,12 @@
     <string name="property_for_sale">En vente</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="photos_of_the_property">Photos of the property</string>
+    <string name="next_photo_button">next photo arrow</string>
+    <string name="for_sale">En vente</string>
+    <string name="back_main_activity_button">Back main activity button</string>
+    <string name="pool">Piscine</string>
+    <string name="cinema">Cinema</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="add_property_title">Ajouter un bien</string>
 </resources>

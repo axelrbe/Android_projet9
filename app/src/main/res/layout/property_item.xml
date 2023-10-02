@@ -2,10 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginTop="8dp"
+    android:layout_height="150dp"
+    android:layout_margin="10dp"
     android:backgroundTint="@color/secondaryPurple"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
@@ -19,7 +17,6 @@
             android:id="@+id/property_item_photo"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
             android:src="@color/grayedText"
             app:shapeAppearanceOverlay="@style/roundedImageView" />
 
@@ -67,7 +64,7 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -76,7 +73,7 @@
 
                 <TextView
                     android:id="@+id/property_item_surface"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:maxLines="1"
@@ -84,14 +81,13 @@
                     android:text="@string/add_property_surface"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/property_item_rooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/property_item_surface"
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:maxLines="1"
@@ -101,9 +97,9 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -112,7 +108,7 @@
 
                 <TextView
                     android:id="@+id/property_item_address"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:maxLines="1"
@@ -120,16 +116,14 @@
                     android:text="@string/add_property_address"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/property_item_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/property_item_address"
                     android:ellipsize="marquee"
-                    android:gravity="end"
                     android:maxLines="1"
                     android:padding="2dp"
                     android:text="@string/add_property_date"
@@ -137,9 +131,9 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -148,8 +142,9 @@
 
                 <TextView
                     android:id="@+id/property_item_proximity"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
                     android:padding="2dp"
@@ -162,8 +157,6 @@
                     android:id="@+id/property_item_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/property_item_proximity"
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:maxLines="3"
@@ -173,7 +166,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,29 +180,29 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
                     android:padding="2dp"
                     android:text="@string/add_property_desc"
+                    android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textAlignment="textStart"
-                    android:layout_weight="1"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/property_item_status_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:ellipsize="marquee"
                     android:maxLines="1"
                     android:padding="2dp"
                     android:text="@string/add_property_status_date"
+                    android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textAlignment="textStart" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 

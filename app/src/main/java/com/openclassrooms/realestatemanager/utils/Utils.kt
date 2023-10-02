@@ -3,8 +3,6 @@ package com.openclassrooms.realestatemanager.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.wifi.WifiManager
-import android.os.Build
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
