@@ -124,7 +124,7 @@ class FormFragment : Fragment() {
                 // Add a marker to the map and move the camera to the selected place
                 googleMap.clear()
                 googleMap.addMarker(MarkerOptions().position(selectedAddressLatLng!!).title(selectedAddress))
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedAddressLatLng, 15f))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedAddressLatLng!!, 15f))
 
                 Log.i("GettingPlacesInfo", "Place: ${place.name}, ${place.id}, ${place.latLng}")
             }

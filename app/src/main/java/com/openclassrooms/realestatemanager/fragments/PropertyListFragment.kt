@@ -31,6 +31,7 @@ class PropertyListFragment : Fragment() {
     private lateinit var propertyViewModel: PropertyViewModel
     private lateinit var propertyRepository: PropertyRepository
     private lateinit var formFragment: FormFragment
+    private lateinit var mapFragment: MapFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPropertyListBinding.inflate(inflater, container, false)
@@ -48,6 +49,7 @@ class PropertyListFragment : Fragment() {
 
         headerBtnManagement()
         showPropertyList()
+        showMapFragment()
     }
 
     private fun headerBtnManagement() {
@@ -69,5 +71,15 @@ class PropertyListFragment : Fragment() {
         propertyViewModel.getPropertyList().onEach { properties ->
             propertyAdapter.submitList(properties)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun showMapFragment() {
+        mapFragment = MapFragment()
+        binding.propertyListHeaderMapIcon.setOnClickListener {
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, mapFragment)
+                .commit()
+        }
     }
 }

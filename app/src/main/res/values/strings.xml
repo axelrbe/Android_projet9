@@ -47,4 +47,6 @@
     <string name="cinema">Cinema</string>
     <string name="restaurants">Restaurants</string>
     <string name="add_property_title">Ajouter un bien</string>
+    <string name="property_map">Carte des biens</string>
+    <string name="location_permission">Autoriser la localisation dans vos paramètre pour utiliser la carte !</string>
 </resources>
