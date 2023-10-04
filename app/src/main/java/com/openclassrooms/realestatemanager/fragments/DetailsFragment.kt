@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
@@ -19,7 +23,8 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private var _binding: FragmentDetailsBinding? = null
     private lateinit var propertyListFragment: PropertyListFragment
-
+    private lateinit var mapFragment: SupportMapFragment
+    private lateinit var googleMap: GoogleMap
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
@@ -82,6 +87,17 @@ class DetailsFragment : Fragment() {
                     .load(property.photos[currentPhotoIndex])
                     .into(imageView)
 
+            }
+        }
+
+        // Google map implementation
+        mapFragment = childFragmentManager.findFragmentById(R.id.confirmation_map) as SupportMapFragment
+        mapFragment.getMapAsync { map ->
+            googleMap = map
+            googleMap.clear()
+            property?.location?.let {
+                googleMap.addMarker(MarkerOptions().position(it).title(property.address))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
             }
         }
     }

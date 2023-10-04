@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
@@ -17,6 +18,7 @@ data class Property(
     val desc: String,
     val photos: List<String>,
     val address: String,
+    val location: LatLng?,
     val proximityPlaces: List<String>,
     val status: String,
     val entryDate: String,

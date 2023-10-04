@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.utils
 
 import androidx.room.TypeConverter
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Date
@@ -28,6 +29,21 @@ class Converters {
         @TypeConverter
         fun fromList(list: List<String>?): String? {
             return Gson().toJson(list)
+        }
+    }
+
+    class LatLngTypeConverter {
+        @TypeConverter
+        fun fromLatLng(latLng: LatLng?): String? {
+            return latLng?.let { "${it.latitude},${it.longitude}" }
+        }
+
+        @TypeConverter
+        fun toLatLng(latLngString: String?): LatLng? {
+            return latLngString?.let {
+                val parts = it.split(",")
+                LatLng(parts[0].toDouble(), parts[1].toDouble())
+            }
         }
     }
 }

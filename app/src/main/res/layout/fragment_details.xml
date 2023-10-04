@@ -98,18 +98,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/add_property_address"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/real_estate_agent"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/details_property_address"
+                    android:id="@+id/details_property_real_estate_agent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/add_property_address"
+                    android:text="@string/real_estate_agent"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -248,20 +248,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:text="@string/real_estate_agent"
+                android:layout_marginTop="5dp"
+                android:text="@string/add_property_address"
                 android:textColor="@color/secondaryPurple"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/details_property_real_estate_agent"
+                android:id="@+id/details_property_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/real_estate_agent"
+                android:text="@string/add_property_address"
                 android:textColor="@color/secondaryPurple"
                 android:textSize="14sp" />
+
+            <fragment
+                android:id="@+id/confirmation_map"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="end"
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
         </LinearLayout>
 

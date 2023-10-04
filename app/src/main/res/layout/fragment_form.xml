@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -74,9 +75,10 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="15dp"
-                    android:text="@string/add_property_type"
+                    android:hint="@string/add_property_type"
+                    android:textColorHint="@color/grayedText"
                     android:textAllCaps="false"
-                    android:textColor="@color/grayedText"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -155,9 +157,10 @@
                 android:drawableStart="@drawable/icon_photo"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="@string/add_property_photos"
+                android:hint="@string/add_property_photos"
+                android:textColorHint="@color/grayedText"
                 android:textAllCaps="false"
-                android:textColor="@color/grayedText"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -170,21 +173,44 @@
                 android:orientation="horizontal"
                 android:visibility="gone" />
 
-            <EditText
-                android:id="@+id/add_property_address"
+            <Button
+                android:id="@+id/add_property_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:autofillHints="input"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_address"
+                android:drawableStart="@drawable/icon_desc"
+                android:drawableEnd="@drawable/icon_dropdown"
+                android:drawablePadding="5dp"
+                android:ellipsize="marquee"
                 android:gravity="center"
-                android:hint="@string/add_property_address"
-                android:inputType="text"
+                android:maxLines="1"
                 android:padding="15dp"
-                android:textColor="@color/white"
+                android:hint="@string/add_property_desc"
                 android:textColorHint="@color/grayedText"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/add_property_desc_editText"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:autofillHints="desc editText"
+                android:background="@color/white"
+                android:gravity="bottom"
+                android:hint="@string/desc_editText"
+                android:inputType="textMultiLine"
+                android:maxLength="400"
+                android:padding="10dp"
+                android:textColor="@color/secondaryPurple"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/add_property_proximity"
@@ -198,9 +224,10 @@
                 android:drawableStart="@drawable/icon_checklist"
                 android:gravity="center"
                 android:hint="@string/proximity_place"
-                android:padding="15dp"
-                android:textColor="@color/grayedText"
                 android:textColorHint="@color/grayedText"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -236,50 +263,26 @@
                 android:textColorHint="@color/grayedText"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/add_property_desc"
+            <fragment
+                android:id="@+id/autocomplete_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_desc"
-                android:drawableEnd="@drawable/icon_dropdown"
-                android:drawablePadding="5dp"
-                android:ellipsize="marquee"
-                android:gravity="center"
-                android:maxLines="1"
-                android:padding="15dp"
-                android:text="@string/add_property_desc"
-                android:textAllCaps="false"
-                android:textColor="@color/grayedText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
 
-            <EditText
-                android:id="@+id/add_property_desc_editText"
+            <fragment
+                android:id="@+id/confirmation_map"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
-                android:autofillHints="desc editText"
-                android:background="@color/white"
-                android:gravity="bottom"
-                android:hint="@string/desc_editText"
-                android:inputType="textMultiLine"
-                android:maxLength="400"
-                android:padding="10dp"
-                android:textColor="@color/secondaryPurple"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
             <Button
                 android:id="@+id/add_property_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="@color/white"
                 android:drawableEnd="@drawable/icon_send"

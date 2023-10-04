@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.utils.Converters
 
 @Database(entities = [Property::class], version = 1)
-@TypeConverters(Converters.DateTypeConverter::class, Converters.StringListTypeConverter::class)
+@TypeConverters(Converters.DateTypeConverter::class, Converters.StringListTypeConverter::class, Converters.LatLngTypeConverter::class)
 abstract class PropertyDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao
 }
