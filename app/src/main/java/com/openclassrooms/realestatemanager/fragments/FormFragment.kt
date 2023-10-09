@@ -198,6 +198,12 @@ class FormFragment : Fragment() {
                     proximityPlacesSelectedItems.add(selectedItem)
                     val textView = TextView(context)
                     textView.text = selectedItem
+                    textView.setPadding(0, 8, 0, 8)
+                    textView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
+                    textView.setTypeface(null, Typeface.BOLD)
+                    textView.textSize = 18F
+                    textView.gravity = Gravity.CENTER
                     binding.addProximityPlacesLayout.addView(textView)
                     binding.addProximityPlacesScrollView.post {
                         binding.addProximityPlacesScrollView.fullScroll(View.FOCUS_DOWN)

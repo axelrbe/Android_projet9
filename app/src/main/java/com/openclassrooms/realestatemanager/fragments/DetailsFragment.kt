@@ -35,7 +35,11 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadPropertyData()
-        goBackToMain()
+        binding.arrowBackBtn.setOnClickListener {
+            propertyListFragment = PropertyListFragment()
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            fragmentManager.popBackStack()
+        }
     }
 
     private fun loadPropertyData() {
@@ -99,16 +103,6 @@ class DetailsFragment : Fragment() {
                 googleMap.addMarker(MarkerOptions().position(it).title(property.address))
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
             }
-        }
-    }
-
-    private fun goBackToMain() {
-        propertyListFragment = PropertyListFragment()
-        binding.arrowBackBtn.setOnClickListener {
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, propertyListFragment)
-                .commit()
         }
     }
 

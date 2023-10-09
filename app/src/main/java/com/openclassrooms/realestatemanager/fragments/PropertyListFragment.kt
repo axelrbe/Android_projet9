@@ -9,12 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.PropertyAdapter
 import com.openclassrooms.realestatemanager.application.RealEstateApplication
-import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentPropertyListBinding
+import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
@@ -22,16 +21,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class PropertyListFragment : Fragment() {
-
     private val binding get() = _binding!!
     private var _binding: FragmentPropertyListBinding? = null
     private lateinit var propertyAdapter: PropertyAdapter
-    private lateinit var propertyRecyclerView: RecyclerView
-    private lateinit var propertyDao: PropertyDao
-    private lateinit var propertyViewModel: PropertyViewModel
-    private lateinit var propertyRepository: PropertyRepository
     private lateinit var formFragment: FormFragment
-    private lateinit var mapFragment: MapFragment
+    private lateinit var propertyList: List<Property>
+    private lateinit var propertyViewModel: PropertyViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPropertyListBinding.inflate(inflater, container, false)
@@ -40,20 +35,68 @@ class PropertyListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Recycler view adapter
-        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
-        propertyRecyclerView = view.findViewById(R.id.properties_recycler_view)
-        propertyAdapter = PropertyAdapter()
-        propertyRecyclerView.layoutManager = LinearLayoutManager(context)
-        propertyRecyclerView.adapter = propertyAdapter
 
-        headerBtnManagement()
-        showPropertyList()
+        propertyAdapter = PropertyAdapter()
+        val propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
+        val propertyRepository = PropertyRepository(propertyDao)
+        propertyViewModel = ViewModelProvider(
+            this,
+            PropertyViewModelFactory(propertyRepository, requireActivity().application)
+        )[PropertyViewModel::class.java]
+
+        // Set up RecyclerView and adapter
+        binding.propertiesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = propertyAdapter
+        }
+
+        // Show the initial list of properties
+        setPropertyList()
+
+        // Reset the filters
+        binding.resetFilterBtn.setOnClickListener {
+            setPropertyList()
+            binding.resetFilterBtn.visibility = View.GONE
+        }
+
+        showFormFragment()
+        showFilterFragment()
         showMapFragment()
     }
 
-    private fun headerBtnManagement() {
-        // TODO search through the property list with search icon
+    private fun setPropertyList() {
+        propertyViewModel.getPropertyList().onEach { properties ->
+            propertyList = properties
+            propertyAdapter.submitList(propertyList)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    fun applyFilters(
+        type: String?,
+        minSurface: Int?,
+        maxSurface: Int?,
+        minPrice: Int?,
+        maxPrice: Int?,
+        proximityPlaces: List<String>?,
+        status: String?,
+        minPhotos: Int?
+    ) {
+        val filteredList = propertyList.filter { property ->
+            (type == null || property.type == type) &&
+                    (minSurface == null || property.surface >= minSurface) &&
+                    (maxSurface == null || property.surface <= maxSurface) &&
+                    (minPrice == null || property.price >= minPrice) &&
+                    (maxPrice == null || property.price <= maxPrice) &&
+                    (proximityPlaces == null || property.proximityPlaces == proximityPlaces) &&
+                    (status == null || property.status == status) &&
+                    (minPhotos == null || property.photos.size >= minPhotos)
+        }
+
+        propertyAdapter.submitList(filteredList)
+        binding.resetFilterBtn.visibility = View.VISIBLE
+    }
+
+    private fun showFormFragment() {
         formFragment = FormFragment()
         binding.propertyListHeaderAddIcon.setOnClickListener {
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
@@ -63,22 +106,24 @@ class PropertyListFragment : Fragment() {
         }
     }
 
-    private fun showPropertyList() {
-        // Observe the propertyList and update the UI
-        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
-        propertyRepository = PropertyRepository(propertyDao)
-        propertyViewModel = ViewModelProvider(this, PropertyViewModelFactory(propertyRepository, requireActivity().application))[PropertyViewModel::class.java]
-        propertyViewModel.getPropertyList().onEach { properties ->
-            propertyAdapter.submitList(properties)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
     private fun showMapFragment() {
-        mapFragment = MapFragment()
+        val mapFragment = MapFragment()
         binding.propertyListHeaderMapIcon.setOnClickListener {
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, mapFragment)
+                .addToBackStack("PropertyListFragment")
+                .commit()
+        }
+    }
+
+    private fun showFilterFragment() {
+        val filterFragment = FilterFragment()
+        binding.showFilterFragmentBtn.setOnClickListener {
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, filterFragment)
+                .addToBackStack(null)
                 .commit()
         }
     }

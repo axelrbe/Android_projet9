@@ -53,11 +53,8 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mapFragmentArrowBack.setOnClickListener {
-            val propertyListFragment = PropertyListFragment()
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, propertyListFragment)
-                .commit()
+            fragmentManager.popBackStack()
         }
 
         addMarkersToMap()
@@ -95,6 +92,7 @@ class MapFragment : Fragment() {
                             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
                             fragmentManager.beginTransaction()
                                 .replace(R.id.fragment_container, detailsFragment)
+                                .addToBackStack("MapFragment")
                                 .commit()
                         }
                     }

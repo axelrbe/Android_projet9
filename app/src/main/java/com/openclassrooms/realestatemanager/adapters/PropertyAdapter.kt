@@ -16,7 +16,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.fragments.DetailsFragment
 import com.openclassrooms.realestatemanager.models.Property
 
-class PropertyAdapter() : ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
+class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -78,6 +78,7 @@ class PropertyAdapter() : ListAdapter<Property, PropertyAdapter.PropertyViewHold
                 val fragmentManager = (context as AppCompatActivity).supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, detailsFragment)
+                    .addToBackStack("PropertyListFragment")
                     .commit()
             }
         }

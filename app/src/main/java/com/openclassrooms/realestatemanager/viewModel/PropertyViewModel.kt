@@ -27,7 +27,6 @@ class PropertyViewModel(private val propertyRepository: PropertyRepository, appl
         return getAllProperties
     }
 
-    // Create a method to add a new property
     fun addProperty(property: Property) {
         viewModelScope.launch {
             propertyRepository.addProperty(property)

@@ -49,4 +49,16 @@
     <string name="add_property_title">Ajouter un bien</string>
     <string name="property_map">Carte des biens</string>
     <string name="location_permission">Autoriser la localisation dans vos paramètre pour utiliser la carte !</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="property_type">Un type de bien en particulier ?</string>
+    <string name="photos">Photos</string>
+    <string name="min_photos_number">Un nombre de photos minimum ?</string>
+    <string name="for_sale_or_not">En vente ou vendu ?</string>
+    <string name="proximity_places">Lieux à proximité</string>
+    <string name="proximity_places_filter">Des lieux indispensables ?</string>
+    <string name="show_filters">show filters</string>
+    <string name="research_filter">Filtrer vos recherches</string>
+    <string name="send">Envoyer</string>
+    <string name="filter">Filtrer</string>
 </resources>

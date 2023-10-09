@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_gravity="center"
             android:layout_toStartOf="@+id/search_icon"
             android:ellipsize="marquee"
             android:maxLines="1"
@@ -48,16 +48,6 @@
             android:padding="15dp"
             android:src="@drawable/icon_add" />
 
-        <ImageButton
-            android:id="@+id/property_list_header_search_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_button_description"
-            android:padding="15dp"
-            android:src="@drawable/icon_search" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.cardview.widget.CardView
@@ -71,7 +61,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:orientation="vertical">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/reset_filter_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/show_filters"
+                android:src="@drawable/icon_reset"
+                android:visibility="gone"
+                app:fabSize="auto" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/show_filter_fragment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/show_filters"
+                android:src="@drawable/icon_filter"
+                app:fabSize="auto" />
+
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>
 

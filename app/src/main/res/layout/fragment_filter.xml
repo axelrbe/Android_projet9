@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".fragments.FilterFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+
+            <ImageButton
+                android:id="@+id/filter_fragment_arrow_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/back_main_activity_button"
+                android:src="@drawable/icon_arrow_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_toStartOf="@+id/search_icon"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:text="@string/research_filter"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:text="@string/add_property_type"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_house" />
+
+            <Button
+                android:id="@+id/filter_type_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="type filters"
+                android:background="@drawable/bottom_border"
+                android:hint="@string/property_type"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grayedText"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="5dp"
+                android:text="@string/add_property_price"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_euro" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/filter_price_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:autofillHints="Minimum price"
+                    android:background="@drawable/bottom_border"
+                    android:hint="@string/min"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grayedText" />
+
+                <EditText
+                    android:id="@+id/filter_price_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="Maximum price"
+                    android:background="@drawable/bottom_border"
+                    android:hint="@string/max"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grayedText" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="5dp"
+                android:text="@string/photos"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_house" />
+
+            <EditText
+                android:id="@+id/filter_photos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="type filters"
+                android:background="@drawable/bottom_border"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:hint="@string/min_photos_number"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grayedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="5dp"
+                android:text="@string/add_property_surface"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_surface" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/filter_surface_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:autofillHints="Minimum price"
+                    android:background="@drawable/bottom_border"
+                    android:hint="@string/min"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grayedText" />
+
+                <EditText
+                    android:id="@+id/filter_surface_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="Maximum price"
+                    android:background="@drawable/bottom_border"
+                    android:hint="@string/max"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grayedText" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="5dp"
+                android:text="@string/proximity_places"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_checklist" />
+
+            <Button
+                android:id="@+id/filter_proximity_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="type filters"
+                android:background="@drawable/bottom_border"
+                android:hint="@string/proximity_places_filter"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grayedText"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <ScrollView
+                android:id="@+id/add_proximity_places_filter_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:scrollbars="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/add_proximity_places_filter_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical" />
+
+            </ScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="5dp"
+                android:text="@string/add_property_status"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/icon_verified" />
+
+            <EditText
+                android:id="@+id/filter_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="type filters"
+                android:background="@drawable/bottom_border"
+                android:hint="@string/for_sale_or_not"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textColorHint="@color/grayedText" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/apply_filters_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"
+            android:text="@string/filter"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@color/secondaryPurple"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
