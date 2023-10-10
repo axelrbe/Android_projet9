@@ -31,7 +31,6 @@ class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder
             val propertyItemPrice = findViewById<TextView>(R.id.property_item_price)
             val propertyItemSurface = findViewById<TextView>(R.id.property_item_surface)
             val propertyItemRooms = findViewById<TextView>(R.id.property_item_rooms)
-            val propertyItemDesc = findViewById<TextView>(R.id.property_item_desc)
             val propertyItemPhoto = findViewById<ShapeableImageView>(R.id.property_item_photo)
             val propertyItemDate = findViewById<TextView>(R.id.property_item_date)
             val propertyItemProximityPlaces = findViewById<TextView>(R.id.property_item_proximity)
@@ -41,9 +40,8 @@ class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder
             propertyItemType.text = currentProperty.type
             "${currentProperty.price}€".also { propertyItemPrice.text = it }
             """${currentProperty.surface}m²""".also { propertyItemSurface.text = it }
-            "${currentProperty.rooms} chambres".also { propertyItemRooms.text = it }
-            propertyItemDesc.text = currentProperty.desc
-            propertyItemDate.text = currentProperty.entryDate
+            (currentProperty.rooms.toString() + " " + context.getString(R.string.rooms)).also { propertyItemRooms.text = it }
+            (context.getString(R.string.since) + " " + currentProperty.entryDate).also { propertyItemDate.text = it }
             propertyItemAddress.text = currentProperty.address
             propertyItemStatus.text = currentProperty.status
 

@@ -17,7 +17,7 @@
     <string name="mansion">Manoir</string>
     <string name="indeterminate">Indéterminé</string>
     <string name="add_property_btn">Ajouter ce bien</string>
-    <string name="add_property_proximity">Point d\'intérets à proxomité:</string>
+    <string name="add_property_proximity">Point d\'intérets à proxomité</string>
     <string name="add_property_status">Status</string>
     <string name="property_status">status of the property</string>
     <string name="add_property_status_date">le</string>
@@ -61,4 +61,6 @@
     <string name="research_filter">Filtrer vos recherches</string>
     <string name="send">Envoyer</string>
     <string name="filter">Filtrer</string>
+    <string name="since">depuis le </string>
+    <string name="rooms">chambres</string>
 </resources>

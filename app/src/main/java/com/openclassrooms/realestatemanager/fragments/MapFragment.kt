@@ -45,12 +45,19 @@ class MapFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
+        propertyRepository = PropertyRepository(propertyDao)
+        propertyViewModel = ViewModelProvider(
+            this,
+            PropertyViewModelFactory(propertyRepository, requireActivity().application)
+        )[PropertyViewModel::class.java]
 
         binding.mapFragmentArrowBack.setOnClickListener {
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
@@ -62,12 +69,6 @@ class MapFragment : Fragment() {
     }
 
     private fun addMarkersToMap() {
-        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
-        propertyRepository = PropertyRepository(propertyDao)
-        propertyViewModel = ViewModelProvider(
-            this,
-            PropertyViewModelFactory(propertyRepository, requireActivity().application)
-        )[PropertyViewModel::class.java]
         propertyViewModel.getPropertyList().onEach { properties ->
             mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
             mapFragment.getMapAsync { map ->
@@ -82,6 +83,35 @@ class MapFragment : Fragment() {
                                 .position(it)
                         )
                         marker?.tag = property
+
+                        googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+                            override fun getInfoWindow(marker: Marker): View? {
+                                return null
+                            }
+
+                            override fun getInfoContents(marker: Marker): View? {
+                                val view = layoutInflater.inflate(
+                                    R.layout.custom_info_window,
+                                    mapFragment.view as ViewGroup,
+                                    false
+                                )
+
+                                val currentProperty = marker.tag as Property
+
+                                view.findViewById<TextView>(R.id.custom_window_property_type).text =
+                                    currentProperty.type
+                                view.findViewById<TextView>(R.id.custom_window_property_address).text =
+                                    currentProperty.address
+                                (currentProperty.surface.toString() + "m²").also { surface ->
+                                    view.findViewById<TextView>(R.id.custom_window_property_surface).text = surface
+                                }
+                                (currentProperty.price.toString() + "€").also { price ->
+                                    view.findViewById<TextView>(R.id.custom_window_property_price).text = price
+                                }
+                                return view
+                            }
+                        })
+
                         googleMap.setOnInfoWindowClickListener { clickedMarker ->
                             val clickedProperty = clickedMarker.tag as Property
                             val detailsFragment = DetailsFragment().apply {
@@ -96,28 +126,6 @@ class MapFragment : Fragment() {
                                 .commit()
                         }
                     }
-                    googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
-                        override fun getInfoWindow(marker: Marker): View {
-                            val view = layoutInflater.inflate(
-                                R.layout.custom_info_window,
-                                mapFragment.view as ViewGroup,
-                                false
-                            )
-                            view.findViewById<TextView>(R.id.text_view_type).text = property.type
-                            view.findViewById<TextView>(R.id.text_view_address).text = property.address
-                            (property.surface.toString() + "m²").also {
-                                view.findViewById<TextView>(R.id.text_view_surface).text = it
-                            }
-                            (property.price.toString() + "€").also {
-                                view.findViewById<TextView>(R.id.text_view_price).text = it
-                            }
-                            return view
-                        }
-
-                        override fun getInfoContents(marker: Marker): View? {
-                            return null
-                        }
-                    })
                 }
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)

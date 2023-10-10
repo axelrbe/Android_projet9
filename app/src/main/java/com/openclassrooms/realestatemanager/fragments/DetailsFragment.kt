@@ -89,6 +89,7 @@ class DetailsFragment : Fragment() {
                 }
                 Glide.with(this)
                     .load(property.photos[currentPhotoIndex])
+                    .centerCrop()
                     .into(imageView)
 
             }
