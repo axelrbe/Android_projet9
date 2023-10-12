@@ -204,7 +204,7 @@
                 android:background="@color/white"
                 android:gravity="bottom"
                 android:hint="@string/desc_editText"
-                android:inputType="textMultiLine|textNoSuggestions"
+                android:inputType="textMultiLine"
                 android:maxLength="400"
                 android:padding="10dp"
                 android:textColor="@color/secondaryPurple"

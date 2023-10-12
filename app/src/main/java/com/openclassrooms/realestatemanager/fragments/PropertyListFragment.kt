@@ -102,6 +102,7 @@ class PropertyListFragment : Fragment() {
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, formFragment)
+                .addToBackStack("PropertyListFragment")
                 .commit()
         }
     }

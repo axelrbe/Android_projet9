@@ -63,4 +63,9 @@
     <string name="filter">Filtrer</string>
     <string name="since">depuis le </string>
     <string name="rooms">chambres</string>
+    <string name="photos_choice_gallery">Choisir depuis votre gallery</string>
+    <string name="photos_choice_camera">Prendre une photo</string>
+    <string name="cancel">Annuler</string>
+    <string name="add_photos_title">Ajouter des photos</string>
+    <string name="custom_view_image_property">custom view image property</string>
 </resources>

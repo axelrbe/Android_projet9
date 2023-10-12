@@ -1,11 +1,15 @@
 package com.openclassrooms.realestatemanager.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -23,7 +27,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.Status
@@ -48,6 +54,8 @@ import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 
 class FormFragment : Fragment() {
 
@@ -60,6 +68,7 @@ class FormFragment : Fragment() {
     private lateinit var placesClient: PlacesClient
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var googleMap: GoogleMap
+    private lateinit var fragmentManager: FragmentManager
     private var selectedAddress: String? = null
     private var selectedAddressLatLng: LatLng? = null
 
@@ -68,24 +77,50 @@ class FormFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
-        propertyRepository = PropertyRepository(propertyDao)
-        propertyViewModel = ViewModelProvider(requireActivity(), PropertyViewModelFactory(propertyRepository, requireActivity().application))[PropertyViewModel::class.java]
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentManager = (context as AppCompatActivity).supportFragmentManager
+        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
+        propertyRepository = PropertyRepository(propertyDao)
+        propertyViewModel = ViewModelProvider(
+            requireActivity(),
+            PropertyViewModelFactory(propertyRepository, requireActivity().application)
+        )[PropertyViewModel::class.java]
+
         binding.addPropertyPhotos.setOnClickListener {
-            val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            pickImg.type = "image/*"
-            getImageFromGallery.launch(pickImg)
+            val options = arrayOf<CharSequence>(
+                getString(R.string.photos_choice_camera),
+                getString(R.string.photos_choice_gallery), getString(R.string.cancel)
+            )
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(getString(R.string.add_photos_title))
+            builder.setItems(options) { dialog, item ->
+                when {
+                    options[item] == getString(R.string.photos_choice_camera) -> {
+                        val packageManager = context?.packageManager
+                        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
+                            getImageFromCamera.launch(takePicture)
+                        }
+                    }
+
+                    options[item] == getString(R.string.photos_choice_gallery) -> {
+                        val pickImg = Intent(Intent.ACTION_GET_CONTENT)
+                        pickImg.type = "image/*"
+                        getImageFromGallery.launch(pickImg)
+                    }
+
+                    options[item] == getString(R.string.cancel) -> {
+                        dialog.dismiss()
+                    }
+                }
+            }
+            builder.show()
         }
 
         binding.formHeaderClose.setOnClickListener {
-            showPropertyListFragment()
+            fragmentManager.popBackStack()
         }
 
         addNewProperty()
@@ -99,7 +134,8 @@ class FormFragment : Fragment() {
         Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
         placesClient = Places.createClient(requireContext())
 
-        val autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        val autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
         autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
         autocompleteFragment.setTypesFilter(listOf(PlaceTypes.ADDRESS))
 
@@ -182,7 +218,7 @@ class FormFragment : Fragment() {
             } catch (e: IllegalArgumentException) {
                 Toast.makeText(context, getString(R.string.failed_add_property), Toast.LENGTH_SHORT).show()
             }
-            showPropertyListFragment()
+            fragmentManager.popBackStack()
         }
     }
 
@@ -275,6 +311,19 @@ class FormFragment : Fragment() {
                 val data = it.data
                 val imgUri = data?.data
                 selectedPhotos.add(imgUri.toString())
+                Log.d("selectedPhotos", "Selected photo URI: $imgUri")
+                updateSelectedPhotos()
+            }
+        }
+
+    private val getImageFromCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val bitmap = data?.extras?.get("data") as Bitmap?
+                val imgUri = saveBitmapToFile(bitmap)
+                selectedPhotos.add(imgUri.toString())
+                Log.d("selectedPhotos", "Selected photo URI: $imgUri")
                 updateSelectedPhotos()
             }
         }
@@ -288,18 +337,24 @@ class FormFragment : Fragment() {
                 .load(photo)
                 .into(imageView)
             imageView.layoutParams = LinearLayout.LayoutParams(250, 250).apply {
-                setMargins(0,0,20,0)
+                setMargins(0, 0, 20, 0)
             }
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             binding.selectedPhotosLayout.addView(imageView)
         }
     }
 
-    private fun showPropertyListFragment() {
-        val propertyListFragment = PropertyListFragment()
-        val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-        fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, propertyListFragment)
-            .commit()
+    private fun saveBitmapToFile(bitmap: Bitmap?): Uri {
+        val file = File(context?.cacheDir, "image.jpg")
+        file.createNewFile()
+        val outputStream = FileOutputStream(file)
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        return FileProvider.getUriForFile(
+            requireContext(),
+            "${context?.packageName}.provider",
+            file
+        )
     }
 }

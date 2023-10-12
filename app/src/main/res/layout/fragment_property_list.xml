@@ -71,7 +71,7 @@
                 android:id="@+id/reset_filter_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/thirdPurple"
                 android:layout_marginBottom="10dp"
                 android:contentDescription="@string/show_filters"
                 android:src="@drawable/icon_reset"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/thirdPurple"
                 android:contentDescription="@string/show_filters"
                 android:src="@drawable/icon_filter"
                 app:fabSize="auto" />
