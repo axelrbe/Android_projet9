@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -18,6 +19,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.viewModel.CurrencyViewModel
 
 class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
@@ -25,6 +28,7 @@ class DetailsFragment : Fragment() {
     private lateinit var propertyListFragment: PropertyListFragment
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var googleMap: GoogleMap
+    private lateinit var currencyViewModel: CurrencyViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
@@ -34,7 +38,10 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currencyViewModel = ViewModelProvider(requireActivity())[CurrencyViewModel::class.java]
+
         loadPropertyData()
+
         binding.arrowBackBtn.setOnClickListener {
             propertyListFragment = PropertyListFragment()
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
@@ -46,13 +53,22 @@ class DetailsFragment : Fragment() {
         val property = arguments?.getParcelable<Property>("property")
 
         binding.detailsPropertyType.text = property?.type
-        "${property?.price.toString()}€".also { binding.detailsPropertyPrice.text = it }
         "${property?.surface.toString()}m²".also { binding.detailsPropertySurface.text = it }
         binding.detailsPropertyRooms.text = property?.rooms.toString()
         binding.detailsPropertyDesc.text = property?.desc
         binding.detailsPropertyEntryDate.text = property?.entryDate
         binding.detailsPropertyAddress.text = property?.address
         binding.detailsPropertyRealEstateAgent.text = property?.realEstateAgent
+
+        currencyViewModel.isEuro.observe(viewLifecycleOwner) { isEuro ->
+            val price = if (isEuro) {
+                Utils.convertDollarToEuro(property?.price ?: 0).toString() + "€"
+            } else {
+                "$" + (property?.price ?: 0).toString()
+            }
+            binding.detailsPropertyPrice.text = price
+        }
+
 
         // Add the proximity places to the layout
         val selectedItems = property?.proximityPlaces ?: emptyList()

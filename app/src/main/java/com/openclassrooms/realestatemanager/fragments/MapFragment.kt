@@ -28,6 +28,8 @@ import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
+import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.viewModel.CurrencyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
 import kotlinx.coroutines.flow.launchIn
@@ -42,6 +44,7 @@ class MapFragment : Fragment() {
     private lateinit var propertyViewModel: PropertyViewModel
     private lateinit var propertyRepository: PropertyRepository
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var currencyViewModel: CurrencyViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
@@ -50,6 +53,8 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        currencyViewModel = ViewModelProvider(requireActivity())[CurrencyViewModel::class.java]
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
@@ -105,7 +110,12 @@ class MapFragment : Fragment() {
                                 (currentProperty.surface.toString() + "m²").also { surface ->
                                     view.findViewById<TextView>(R.id.custom_window_property_surface).text = surface
                                 }
-                                (currentProperty.price.toString() + "€").also { price ->
+                                currencyViewModel.isEuro.observe(viewLifecycleOwner) { isEuro ->
+                                    val price = if (isEuro) {
+                                        Utils.convertDollarToEuro(property.price).toString() + "€"
+                                    } else {
+                                        "$" + (property.price).toString()
+                                    }
                                     view.findViewById<TextView>(R.id.custom_window_property_price).text = price
                                 }
                                 return view

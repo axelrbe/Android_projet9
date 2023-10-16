@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +18,7 @@ import com.openclassrooms.realestatemanager.application.RealEstateApplication
 import com.openclassrooms.realestatemanager.databinding.FragmentPropertyListBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
+import com.openclassrooms.realestatemanager.viewModel.CurrencyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +31,8 @@ class PropertyListFragment : Fragment() {
     private lateinit var formFragment: FormFragment
     private lateinit var propertyList: List<Property>
     private lateinit var propertyViewModel: PropertyViewModel
+    private lateinit var currencyViewModel: CurrencyViewModel
+    private lateinit var fragmentManager: FragmentManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPropertyListBinding.inflate(inflater, container, false)
@@ -36,13 +42,21 @@ class PropertyListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        propertyAdapter = PropertyAdapter()
+        fragmentManager = (context as AppCompatActivity).supportFragmentManager
+        propertyAdapter = PropertyAdapter(false)
+
         val propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
         val propertyRepository = PropertyRepository(propertyDao)
         propertyViewModel = ViewModelProvider(
             this,
             PropertyViewModelFactory(propertyRepository, requireActivity().application)
         )[PropertyViewModel::class.java]
+
+        currencyViewModel = ViewModelProvider(requireActivity())[CurrencyViewModel::class.java]
+        currencyViewModel.isEuro.observe(viewLifecycleOwner) { isEuro ->
+            propertyAdapter.isEuro = isEuro
+            propertyAdapter.notifyDataSetChanged()
+        }
 
         // Set up RecyclerView and adapter
         binding.propertiesRecyclerView.apply {
@@ -59,9 +73,39 @@ class PropertyListFragment : Fragment() {
             binding.resetFilterBtn.visibility = View.GONE
         }
 
+        binding.propertyListHeaderDots.setOnClickListener {
+            currencyViewModel.toggleCurrency()
+        }
+
+        binding.propertyListHeaderDots.setOnClickListener {
+            showPopUpMenu()
+        }
+
         showFormFragment()
         showFilterFragment()
         showMapFragment()
+    }
+
+    private fun showPopUpMenu() {
+        val popupMenu = PopupMenu(requireContext(), binding.propertyListHeaderDots)
+        popupMenu.menuInflater.inflate(R.menu.header_main_popup_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_switch_currency -> {
+                    currencyViewModel.toggleCurrency()
+                    Toast.makeText(requireContext(), getString(R.string.convert_currency_success), Toast.LENGTH_SHORT)
+                        .show()
+                    true
+                }
+
+                R.id.menu_simulator -> {
+                    TODO("Add access to the simulator")
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 
     private fun setPropertyList() {
@@ -99,7 +143,6 @@ class PropertyListFragment : Fragment() {
     private fun showFormFragment() {
         formFragment = FormFragment()
         binding.propertyListHeaderAddIcon.setOnClickListener {
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, formFragment)
                 .addToBackStack("PropertyListFragment")
@@ -110,7 +153,6 @@ class PropertyListFragment : Fragment() {
     private fun showMapFragment() {
         val mapFragment = MapFragment()
         binding.propertyListHeaderMapIcon.setOnClickListener {
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, mapFragment)
                 .addToBackStack("PropertyListFragment")

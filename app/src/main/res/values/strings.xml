@@ -71,4 +71,8 @@
     <string name="enter_photo_name">Entrer un nom pour la photo</string>
     <string name="photo_name">Nom de la pièce ?</string>
     <string name="add">Ajouter</string>
+    <string name="simulator">Simulateur immobilier</string>
+    <string name="settings">Paramètre</string>
+    <string name="convert_currency"><![CDATA[Euro <-> USD]]></string>
+    <string name="convert_currency_success">Devise modifié avec succès !</string>
 </resources>

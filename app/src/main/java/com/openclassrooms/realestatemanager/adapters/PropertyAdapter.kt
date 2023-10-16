@@ -15,8 +15,10 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.customView.NamedImageView
 import com.openclassrooms.realestatemanager.fragments.DetailsFragment
 import com.openclassrooms.realestatemanager.models.Property
+import com.openclassrooms.realestatemanager.utils.Utils
 
-class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
+class PropertyAdapter(var isEuro: Boolean) :
+    ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -38,12 +40,20 @@ class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder
             val propertyItemStatus = findViewById<TextView>(R.id.property_item_status)
 
             propertyItemType.text = currentProperty.type
-            "${currentProperty.price}€".also { propertyItemPrice.text = it }
             """${currentProperty.surface}m²""".also { propertyItemSurface.text = it }
-            (currentProperty.rooms.toString() + " " + context.getString(R.string.rooms)).also { propertyItemRooms.text = it }
+            (currentProperty.rooms.toString() + " " + context.getString(R.string.rooms)).also {
+                propertyItemRooms.text = it
+            }
             (context.getString(R.string.since) + " " + currentProperty.entryDate).also { propertyItemDate.text = it }
             propertyItemAddress.text = currentProperty.address
             propertyItemStatus.text = currentProperty.status
+
+            val price = if (isEuro) {
+                Utils.convertDollarToEuro(currentProperty.price).toString() + "€"
+            } else {
+                "$" + (currentProperty.price).toString()
+            }
+            propertyItemPrice.text = price
 
             val proximityPlacesList: String = TextUtils.join(", ", currentProperty.proximityPlaces)
             propertyItemProximityPlaces.text = proximityPlacesList
