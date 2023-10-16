@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.adapters
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -10,9 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.android.material.imageview.ShapeableImageView
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.customView.NamedImageView
 import com.openclassrooms.realestatemanager.fragments.DetailsFragment
 import com.openclassrooms.realestatemanager.models.Property
 
@@ -31,7 +31,7 @@ class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder
             val propertyItemPrice = findViewById<TextView>(R.id.property_item_price)
             val propertyItemSurface = findViewById<TextView>(R.id.property_item_surface)
             val propertyItemRooms = findViewById<TextView>(R.id.property_item_rooms)
-            val propertyItemPhoto = findViewById<ShapeableImageView>(R.id.property_item_photo)
+            val propertyItemImage = findViewById<NamedImageView>(R.id.property_item_custom_image)
             val propertyItemDate = findViewById<TextView>(R.id.property_item_date)
             val propertyItemProximityPlaces = findViewById<TextView>(R.id.property_item_proximity)
             val propertyItemAddress = findViewById<TextView>(R.id.property_item_address)
@@ -48,22 +48,22 @@ class PropertyAdapter : ListAdapter<Property, PropertyAdapter.PropertyViewHolder
             val proximityPlacesList: String = TextUtils.join(", ", currentProperty.proximityPlaces)
             propertyItemProximityPlaces.text = proximityPlacesList
 
-            Glide.with(holder.itemView)
-                .load(currentProperty.photos[0])
-                .centerCrop()
-                .into(propertyItemPhoto)
+            if (!currentProperty?.photos.isNullOrEmpty()) {
+                for (photo in currentProperty?.photos!!) {
+                    propertyItemImage.setImageUri(Uri.parse(photo.uri))
+                    propertyItemImage.setText(photo.name)
+                }
+            }
 
             var currentPhotoIndex = 0
-            propertyItemPhoto.setOnClickListener {
-                if (position != RecyclerView.NO_POSITION) {
-                    if (currentProperty.photos.size > 1) {
-                        currentPhotoIndex = (currentPhotoIndex + 1) % currentProperty.photos.size
-                        Glide.with(holder.itemView)
-                            .load(currentProperty.photos[currentPhotoIndex])
-                            .centerCrop()
-                            .into(propertyItemPhoto)
-                    }
+            propertyItemImage.setOnClickListener {
+                if (currentProperty?.photos?.size!! > (currentPhotoIndex + 1)) {
+                    currentPhotoIndex++
+                } else {
+                    currentPhotoIndex = 0
                 }
+                propertyItemImage.setImageUri(Uri.parse(currentProperty.photos[currentPhotoIndex].uri))
+                currentProperty.photos[currentPhotoIndex].name.let { it1 -> propertyItemImage.setText(it1) }
             }
 
             holder.itemView.setOnClickListener {

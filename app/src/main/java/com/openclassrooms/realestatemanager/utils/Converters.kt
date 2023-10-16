@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.openclassrooms.realestatemanager.models.Property
 import java.util.Date
 
 
@@ -44,6 +45,19 @@ class Converters {
                 val parts = it.split(",")
                 LatLng(parts[0].toDouble(), parts[1].toDouble())
             }
+        }
+    }
+
+    class PhotoListConverter {
+        @TypeConverter
+        fun fromString(value: String): List<Property.Photo> {
+            val listType = object : TypeToken<List<Property.Photo>>() {}.type
+            return Gson().fromJson(value, listType)
+        }
+
+        @TypeConverter
+        fun fromList(list: List<Property.Photo>): String {
+            return Gson().toJson(list)
         }
     }
 }

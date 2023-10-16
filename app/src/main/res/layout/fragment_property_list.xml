@@ -39,13 +39,23 @@
             android:textStyle="bold" />
 
         <ImageButton
+            android:id="@+id/property_list_header_dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/menu_button_description"
+            android:padding="5dp"
+            android:src="@drawable/icon_three_vertical_dots" />
+
+        <ImageButton
             android:id="@+id/property_list_header_add_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@android:color/transparent"
             android:contentDescription="@string/menu_button_description"
-            android:padding="15dp"
+            android:padding="5dp"
             android:src="@drawable/icon_add" />
 
     </androidx.appcompat.widget.Toolbar>

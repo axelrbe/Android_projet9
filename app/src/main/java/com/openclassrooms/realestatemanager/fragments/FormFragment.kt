@@ -31,7 +31,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -47,6 +46,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.application.RealEstateApplication
+import com.openclassrooms.realestatemanager.customView.NamedImageView
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentFormBinding
 import com.openclassrooms.realestatemanager.models.Property
@@ -183,7 +183,7 @@ class FormFragment : Fragment() {
             val propertySurface: Long = binding.addPropertySurface.text.toString().toLong()
             val propertyRooms: Int = binding.addPropertyRooms.text.toString().toInt()
             val propertyDesc: String = binding.addPropertyDesc.text.toString()
-            val propertyPhotos: List<String> = selectedPhotos
+            val propertyPhotos: List<Property.Photo> = selectedPhotos
             val propertyRealEstateAgent: String = binding.addPropertyRealEstateAgent.text.toString()
             val todayDate = Utils.todayDate
 
@@ -304,15 +304,14 @@ class FormFragment : Fragment() {
         })
     }
 
-    private val selectedPhotos = ArrayList<String>()
+    private val selectedPhotos = ArrayList<Property.Photo>()
     private val getImageFromGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 val data = it.data
                 val imgUri = data?.data
-                selectedPhotos.add(imgUri.toString())
-                Log.d("selectedPhotos", "Selected photo URI: $imgUri")
-                updateSelectedPhotos()
+                val alertDialog = createNameDialog(imgUri)
+                alertDialog.show()
             }
         }
 
@@ -322,25 +321,65 @@ class FormFragment : Fragment() {
                 val data = it.data
                 val bitmap = data?.extras?.get("data") as Bitmap?
                 val imgUri = saveBitmapToFile(bitmap)
-                selectedPhotos.add(imgUri.toString())
-                Log.d("selectedPhotos", "Selected photo URI: $imgUri")
-                updateSelectedPhotos()
+                val alertDialog = createNameDialog(imgUri)
+                alertDialog.show()
             }
         }
+
+    private fun createNameDialog(imgUri: Uri?): AlertDialog {
+        val nameEditText = EditText(context)
+        nameEditText.hint = "Enter photo name"
+        nameEditText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        return AlertDialog.Builder(requireContext())
+            .setTitle("Enter photo name")
+            .setView(nameEditText)
+            .setPositiveButton("OK") { dialog, _ ->
+                val name = nameEditText.text.toString()
+                val photo = Property.Photo(uri = imgUri.toString(), name = name)
+                selectedPhotos.add(photo)
+                updateSelectedPhotos()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+    }
 
     private fun updateSelectedPhotos() {
         binding.selectedPhotosLayout.visibility = View.VISIBLE
         binding.selectedPhotosLayout.removeAllViews()
         for (photo in selectedPhotos) {
-            val imageView = ImageView(context)
-            Glide.with(imageView)
-                .load(photo)
-                .into(imageView)
-            imageView.layoutParams = LinearLayout.LayoutParams(250, 250).apply {
+            val namedImageView = context?.let { NamedImageView(it, null) }
+            namedImageView?.setImageUri(Uri.parse(photo.uri))
+            namedImageView?.setText(photo.name)
+            namedImageView?.layoutParams = LinearLayout.LayoutParams(300, 300
+            ).apply {
                 setMargins(0, 0, 20, 0)
             }
-            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-            binding.selectedPhotosLayout.addView(imageView)
+            binding.selectedPhotosLayout.addView(namedImageView)
+
+            val alertDialog = AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.photo_name))
+                .setView(namedImageView?.getNameTextView())
+                .setPositiveButton(getString(R.string.add)) { dialog, _ ->
+                    val name = namedImageView?.getNameTextView()?.text.toString()
+                    photo.name = name
+                    namedImageView?.setText(name)
+                    dialog.dismiss()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+
+            namedImageView?.setOnClickListener {
+                alertDialog.show()
+            }
         }
     }
 

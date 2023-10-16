@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.fragments
 
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -70,30 +70,7 @@ class DetailsFragment : Fragment() {
             linearLayout.addView(textView)
         }
 
-        // Add photos to image view + next photo btn management
-        val imageView = binding.detailsPropertyPhotosImageView
-        if (!property?.photos.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(property?.photos?.get(0))
-                .centerCrop()
-                .into(imageView)
-        }
-        val nextPhotoBtn = binding.detailsPropertyPhotosNextBtn
-        var currentPhotoIndex = 0
-        nextPhotoBtn.setOnClickListener {
-            if (property?.photos != null) {
-                if (property.photos.size > (currentPhotoIndex + 1)) {
-                    currentPhotoIndex++
-                } else {
-                    currentPhotoIndex = 0
-                }
-                Glide.with(this)
-                    .load(property.photos[currentPhotoIndex])
-                    .centerCrop()
-                    .into(imageView)
-
-            }
-        }
+        showCustomViewForImage(property)
 
         // Google map implementation
         mapFragment = childFragmentManager.findFragmentById(R.id.confirmation_map) as SupportMapFragment
@@ -104,6 +81,28 @@ class DetailsFragment : Fragment() {
                 googleMap.addMarker(MarkerOptions().position(it).title(property.address))
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
             }
+        }
+    }
+
+    private fun showCustomViewForImage(property: Property?) {
+        val namedImageView = binding.detailsPropertyPhotosCustomImageView
+        if (!property?.photos.isNullOrEmpty()) {
+            for (photo in property?.photos!!) {
+                namedImageView.setImageUri(Uri.parse(photo.uri))
+                namedImageView.setText(photo.name)
+            }
+        }
+
+        val nextPhotoBtn = binding.detailsPropertyPhotosNextBtn
+        var currentPhotoIndex = 0
+        nextPhotoBtn.setOnClickListener {
+            if (property?.photos?.size!! > (currentPhotoIndex + 1)) {
+                currentPhotoIndex++
+            } else {
+                currentPhotoIndex = 0
+            }
+            namedImageView.setImageUri(Uri.parse(property.photos[currentPhotoIndex].uri))
+            property.photos[currentPhotoIndex].name.let { it1 -> namedImageView.setText(it1) }
         }
     }
 

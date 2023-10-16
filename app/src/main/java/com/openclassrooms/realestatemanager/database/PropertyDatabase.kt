@@ -12,6 +12,7 @@ import com.openclassrooms.realestatemanager.utils.Converters
     Converters.DateTypeConverter::class,
     Converters.StringListTypeConverter::class,
     Converters.LatLngTypeConverter::class,
+    Converters.PhotoListConverter::class
 )
 abstract class PropertyDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao

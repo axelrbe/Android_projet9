@@ -68,4 +68,7 @@
     <string name="cancel">Annuler</string>
     <string name="add_photos_title">Ajouter des photos</string>
     <string name="custom_view_image_property">custom view image property</string>
+    <string name="enter_photo_name">Entrer un nom pour la photo</string>
+    <string name="photo_name">Nom de la pièce ?</string>
+    <string name="add">Ajouter</string>
 </resources>
