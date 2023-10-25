@@ -17,9 +17,11 @@ import com.openclassrooms.realestatemanager.fragments.DetailsFragment
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.utils.Utils
 
+
 class PropertyAdapter(var isEuro: Boolean) :
     ListAdapter<Property, PropertyAdapter.PropertyViewHolder>(DiffCallback()) {
 
+    private var isTablet = false
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
@@ -77,17 +79,26 @@ class PropertyAdapter(var isEuro: Boolean) :
             }
 
             holder.itemView.setOnClickListener {
-                val detailsFragment = DetailsFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable("property", currentProperty)
-                    }
-                }
+                val tabletSize = resources.getBoolean(R.bool.isTablet)
 
                 val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-                fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, detailsFragment)
-                    .addToBackStack("PropertyListFragment")
-                    .commit()
+                if (tabletSize) {
+                    val detailFragment = DetailsFragment.newInstance(currentProperty)
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.detail_fragment_container, detailFragment)
+                        .commit()
+                } else {
+                    val detailsFragment = DetailsFragment().apply {
+                        arguments = Bundle().apply {
+                            putParcelable("property", currentProperty)
+                        }
+                    }
+
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, detailsFragment)
+                        .addToBackStack("PropertyListFragment")
+                        .commit()
+                }
             }
         }
     }

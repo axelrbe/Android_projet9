@@ -2,11 +2,11 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="133dp"
     android:layout_margin="5dp"
-    android:backgroundTint="@color/secondaryPurple"
+    android:backgroundTint="@color/white"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardElevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,26 +15,25 @@
 
         <com.openclassrooms.realestatemanager.customView.NamedImageView
             android:id="@+id/property_item_custom_image"
-            android:layout_width="100dp"
+            android:layout_width="85dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:src="@color/grayedText"
             app:shapeAppearanceOverlay="@style/roundedImageView" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/purple_rounded_background"
+                android:layout_marginEnd="5dp"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:background="@color/primaryPurple">
 
                 <TextView
                     android:id="@+id/property_item_type"
@@ -42,11 +41,13 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="2dp"
                     android:text="@string/add_property_type"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"/>
 
                 <TextView
                     android:id="@+id/property_item_price"
@@ -57,10 +58,10 @@
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/add_property_price"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -68,7 +69,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
@@ -79,9 +80,8 @@
                     android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
-                    android:padding="2dp"
                     android:text="@string/add_property_surface"
-                    android:textColor="@color/white"
+                    android:textColor="@color/secondaryPurple"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -92,9 +92,9 @@
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/add_property_rooms"
-                    android:textColor="@color/white"
+                    android:textColor="@color/secondaryPurple"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -103,7 +103,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
@@ -114,9 +114,9 @@
                     android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/add_property_address"
-                    android:textColor="@color/white"
+                    android:textColor="@color/secondaryPurple"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -126,7 +126,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
@@ -137,9 +137,9 @@
                     android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/add_property_proximity"
-                    android:textColor="@color/white"
+                    android:textColor="@color/secondaryPurple"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -148,7 +148,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
@@ -169,12 +169,12 @@
                         android:background="@color/white"
                         android:ellipsize="marquee"
                         android:maxLines="1"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
                         android:text="@string/add_property_status"
                         android:textAllCaps="true"
                         android:textColor="@color/secondaryPurple"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                 </androidx.cardview.widget.CardView>
@@ -186,9 +186,9 @@
                     android:layout_weight="1"
                     android:ellipsize="marquee"
                     android:maxLines="1"
-                    android:padding="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/add_property_date"
-                    android:textColor="@color/white"
+                    android:textColor="@color/secondaryPurple"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 

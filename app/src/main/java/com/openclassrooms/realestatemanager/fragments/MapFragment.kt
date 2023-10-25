@@ -160,7 +160,7 @@ class MapFragment : Fragment() {
                                         LatLng(
                                             location.latitude,
                                             location.longitude
-                                        ), 15f
+                                        ), 5f
                                     )
                                 )
                             }
@@ -182,7 +182,7 @@ class MapFragment : Fragment() {
                                         LatLng(
                                             location.latitude,
                                             location.longitude
-                                        ), 15f
+                                        ), 5f
                                     )
                                 )
                             }

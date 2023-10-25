@@ -34,7 +34,7 @@
             android:maxLines="1"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -42,9 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginEnd="5dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/menu_button_description"
-            android:padding="5dp"
             android:src="@drawable/icon_three_vertical_dots" />
 
         <ImageButton
@@ -54,7 +54,6 @@
             android:layout_gravity="end"
             android:background="@android:color/transparent"
             android:contentDescription="@string/menu_button_description"
-            android:padding="5dp"
             android:src="@drawable/icon_add" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -72,25 +71,42 @@
             tools:layout="@layout/fragment_filter" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/details_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.DetailsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_details" />
-
-        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/form_fragment"
             android:name="com.openclassrooms.realestatemanager.fragments.FormFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/fragment_form" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/property_list_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.PropertyListFragment"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/fragment_property_list" />
+            android:orientation="horizontal">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/property_list_fragment"
+                android:name="com.openclassrooms.realestatemanager.fragments.PropertyListFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_property_list" />
+
+            <FrameLayout
+                android:id="@+id/detail_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.2">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/details_fragment"
+                    android:name="com.openclassrooms.realestatemanager.fragments.DetailsFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout="@layout/fragment_details" />
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </FrameLayout>
 

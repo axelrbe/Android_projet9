@@ -9,7 +9,7 @@
     <string name="add_property_desc">Description</string>
     <string name="add_property_photos">Ajouter des photos +</string>
     <string name="add_property_address">Adresse</string>
-    <string name="add_property_date">Date d\'ajout</string>
+    <string name="add_property_date">Ajouté le</string>
     <string name="appartment">Appartement</string>
     <string name="house">Maison</string>
     <string name="loft">Loft</string>
@@ -17,12 +17,12 @@
     <string name="mansion">Manoir</string>
     <string name="indeterminate">Indéterminé</string>
     <string name="add_property_btn">Ajouter ce bien</string>
-    <string name="add_property_proximity">Point d\'intérets à proxomité</string>
+    <string name="add_property_proximity">Lieux proches :</string>
     <string name="add_property_status">Status</string>
     <string name="property_status">status of the property</string>
     <string name="add_property_status_date">le</string>
-    <string name="desc_editText">Tapez votre description ici… (Max 400 charactères)</string>
-    <string name="proximity_place">Lieux à proximités</string>
+    <string name="desc_editText">Tapez votre description ici…</string>
+    <string name="proximity_place">Lieux proches</string>
     <string name="college">Collège</string>
     <string name="lycee">Lycée</string>
     <string name="primary">Ecole primaire</string>
@@ -37,7 +37,6 @@
     <string name="success_add_property">Bien ajouté avec succès !</string>
     <string name="failed_add_property">Votre bien n\'a pas pu être ajouté</string>
     <string name="property_for_sale">En vente</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="photos_of_the_property">Photos of the property</string>
     <string name="next_photo_button">next photo arrow</string>
@@ -75,4 +74,16 @@
     <string name="settings">Paramètre</string>
     <string name="convert_currency"><![CDATA[Euro <-> USD]]></string>
     <string name="convert_currency_success">Devise modifié avec succès !</string>
+    <string name="title_activity_simulator">SimulatorActivity</string>
+    <string name="contribution">Contribution</string>
+    <string name="duration">Durée (en années)</string>
+    <string name="rate">Taux (en %)</string>
+    <string name="simulate">Simuler</string>
+    <string name="result">Result</string>
+    <string name="monthly_payment">"Vous aurez à payer par mois: "</string>
+    <string name="simulator_result_first_part">"Vous aurez à payer un total de "</string>
+    <string name="simulator_result_second_part">dont</string>
+    <string name="simulator_result_third_part">par mois !</string>
+    <string name="amount">Montant</string>
+    <string name="chose_money">Choisissez une devise</string>
 </resources>

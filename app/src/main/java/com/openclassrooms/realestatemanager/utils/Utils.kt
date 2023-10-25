@@ -7,6 +7,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /**
@@ -51,5 +52,18 @@ object Utils {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
 
         return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    fun calculateMonthlyPayment(
+        purchasePrice: Double,
+        downPayment: Double,
+        interestRate: Double,
+        loanDuration: Int
+    ): Double {
+        val loanAmount = purchasePrice - downPayment
+        val monthlyInterestRate = interestRate / 12 / 100
+        val numberOfPayments = loanDuration * 12
+        val mathPower = (1 + monthlyInterestRate).pow(numberOfPayments.toDouble())
+        return loanAmount * (monthlyInterestRate * mathPower / (mathPower - 1))
     }
 }

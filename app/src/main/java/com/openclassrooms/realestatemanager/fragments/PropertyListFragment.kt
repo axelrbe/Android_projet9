@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +26,6 @@ class PropertyListFragment : Fragment() {
     private val binding get() = _binding!!
     private var _binding: FragmentPropertyListBinding? = null
     private lateinit var propertyAdapter: PropertyAdapter
-    private lateinit var formFragment: FormFragment
     private lateinit var propertyList: List<Property>
     private lateinit var propertyViewModel: PropertyViewModel
     private lateinit var currencyViewModel: CurrencyViewModel
@@ -73,45 +70,24 @@ class PropertyListFragment : Fragment() {
             binding.resetFilterBtn.visibility = View.GONE
         }
 
-        binding.propertyListHeaderDots.setOnClickListener {
-            currencyViewModel.toggleCurrency()
-        }
-
-        binding.propertyListHeaderDots.setOnClickListener {
-            showPopUpMenu()
-        }
-
-        showFormFragment()
         showFilterFragment()
-        showMapFragment()
-    }
-
-    private fun showPopUpMenu() {
-        val popupMenu = PopupMenu(requireContext(), binding.propertyListHeaderDots)
-        popupMenu.menuInflater.inflate(R.menu.header_main_popup_menu, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_switch_currency -> {
-                    currencyViewModel.toggleCurrency()
-                    Toast.makeText(requireContext(), getString(R.string.convert_currency_success), Toast.LENGTH_SHORT)
-                        .show()
-                    true
-                }
-
-                R.id.menu_simulator -> {
-                    TODO("Add access to the simulator")
-                }
-
-                else -> false
-            }
-        }
-        popupMenu.show()
     }
 
     private fun setPropertyList() {
         propertyViewModel.getPropertyList().onEach { properties ->
             propertyList = properties
             propertyAdapter.submitList(propertyList)
+
+            if (properties.isNotEmpty()) {
+                val tabletSize = resources.getBoolean(R.bool.isTablet)
+                val firstProperty = properties.sortedBy { it.id }[0]
+                if (tabletSize) {
+                    val detailFragment = DetailsFragment.newInstance(firstProperty)
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.detail_fragment_container, detailFragment)
+                        .commit()
+                }
+            }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -140,30 +116,9 @@ class PropertyListFragment : Fragment() {
         binding.resetFilterBtn.visibility = View.VISIBLE
     }
 
-    private fun showFormFragment() {
-        formFragment = FormFragment()
-        binding.propertyListHeaderAddIcon.setOnClickListener {
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, formFragment)
-                .addToBackStack("PropertyListFragment")
-                .commit()
-        }
-    }
-
-    private fun showMapFragment() {
-        val mapFragment = MapFragment()
-        binding.propertyListHeaderMapIcon.setOnClickListener {
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, mapFragment)
-                .addToBackStack("PropertyListFragment")
-                .commit()
-        }
-    }
-
     private fun showFilterFragment() {
         val filterFragment = FilterFragment()
         binding.showFilterFragmentBtn.setOnClickListener {
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, filterFragment)
                 .addToBackStack(null)

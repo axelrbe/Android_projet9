@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryPurple</item>
         <item name="colorPrimaryDark">@color/secondaryPurple</item>
         <item name="colorAccent">@color/thirdPurple</item>
+        <item name="chipCornerRadius">4dp</item>
     </style>
 
     <!-- Rounded image style. -->

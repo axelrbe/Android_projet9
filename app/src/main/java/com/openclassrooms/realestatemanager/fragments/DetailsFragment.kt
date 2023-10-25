@@ -3,11 +3,9 @@ package com.openclassrooms.realestatemanager.fragments
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding
 import com.openclassrooms.realestatemanager.models.Property
@@ -42,7 +41,7 @@ class DetailsFragment : Fragment() {
 
         loadPropertyData()
 
-        binding.arrowBackBtn.setOnClickListener {
+        binding.arrowBackBtn?.setOnClickListener {
             propertyListFragment = PropertyListFragment()
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             fragmentManager.popBackStack()
@@ -52,7 +51,7 @@ class DetailsFragment : Fragment() {
     private fun loadPropertyData() {
         val property = arguments?.getParcelable<Property>("property")
 
-        binding.detailsPropertyType.text = property?.type
+        binding.detailsPropertyType?.text  = property?.type
         "${property?.surface.toString()}m²".also { binding.detailsPropertySurface.text = it }
         binding.detailsPropertyRooms.text = property?.rooms.toString()
         binding.detailsPropertyDesc.text = property?.desc
@@ -70,20 +69,17 @@ class DetailsFragment : Fragment() {
         }
 
 
-        // Add the proximity places to the layout
-        val selectedItems = property?.proximityPlaces ?: emptyList()
-        val linearLayout = binding.detailsProximityPlacesLayout
-        linearLayout.removeAllViews()
-        for (selectedItem in selectedItems) {
-            val textView = TextView(requireContext())
-            textView.text = selectedItem
-            textView.setPadding(10, 10, 10, 10)
-            textView.textSize = 20F
-            textView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
-            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            textView.setTypeface(null, Typeface.BOLD)
-            textView.gravity = Gravity.CENTER_HORIZONTAL
-            linearLayout.addView(textView)
+        // Add the proximity places to the chipGroup
+        val proximityPlaces = property?.proximityPlaces ?: emptyList()
+        val chipGroup = binding.detailsProximityPlacesChipGroup
+        chipGroup.removeAllViews()
+        for (place in proximityPlaces) {
+            val chip = Chip(requireContext())
+            chip.text = place
+            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
+            chip.setChipBackgroundColorResource(R.color.white)
+            chip.setTypeface(null, Typeface.BOLD)
+            chipGroup.addView(chip)
         }
 
         showCustomViewForImage(property)
@@ -125,5 +121,15 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(property: Property) =
+            DetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("property", property)
+                }
+            }
     }
 }

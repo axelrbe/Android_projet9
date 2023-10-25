@@ -21,7 +21,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +42,7 @@ import com.google.android.libraries.places.api.model.PlaceTypes
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.chip.Chip
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.application.RealEstateApplication
@@ -81,6 +81,7 @@ class FormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fragmentManager = (context as AppCompatActivity).supportFragmentManager
+
         propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
         propertyRepository = PropertyRepository(propertyDao)
         propertyViewModel = ViewModelProvider(
@@ -213,7 +214,6 @@ class FormFragment : Fragment() {
                 "Description".also { binding.addPropertyDesc.text = it }
                 binding.selectedPhotosLayout.visibility = View.GONE
                 binding.addPropertyRealEstateAgent.setText("")
-                binding.addProximityPlacesLayout.visibility = View.GONE
                 Toast.makeText(context, getString(R.string.success_add_property), Toast.LENGTH_SHORT).show()
             } catch (e: IllegalArgumentException) {
                 Toast.makeText(context, getString(R.string.failed_add_property), Toast.LENGTH_SHORT).show()
@@ -230,20 +230,16 @@ class FormFragment : Fragment() {
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 val selectedItem = menuItem.title.toString()
+                val chipGroup = binding.formProximityPlacesChipGroup
                 if (!proximityPlacesSelectedItems.contains(selectedItem)) {
                     proximityPlacesSelectedItems.add(selectedItem)
-                    val textView = TextView(context)
-                    textView.text = selectedItem
-                    textView.setPadding(0, 8, 0, 8)
-                    textView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
-                    textView.setTypeface(null, Typeface.BOLD)
-                    textView.textSize = 18F
-                    textView.gravity = Gravity.CENTER
-                    binding.addProximityPlacesLayout.addView(textView)
-                    binding.addProximityPlacesScrollView.post {
-                        binding.addProximityPlacesScrollView.fullScroll(View.FOCUS_DOWN)
-                    }
+                    val chip = Chip(requireContext())
+                    chip.text = selectedItem
+                    chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
+                    chip.setChipBackgroundColorResource(R.color.white)
+                    chip.setTypeface(null, Typeface.BOLD)
+                    chip.textSize = 18F
+                    chipGroup.addView(chip)
                 } else {
                     val toast = Toast.makeText(context, R.string.already_selected_proximity_place, Toast.LENGTH_SHORT)
                     toast.show()
