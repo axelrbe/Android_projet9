@@ -12,6 +12,9 @@ interface PropertyDao {
     @Query("SELECT * FROM properties")
     fun getAllProperties(): Flow<List<Property>>
 
+    @Query("SELECT COUNT(*) FROM properties")
+    fun getCount(): Int
+
     @Insert
     suspend fun insertProperty(property: Property)
 

@@ -17,7 +17,7 @@
     <string name="mansion">Manoir</string>
     <string name="indeterminate">Indéterminé</string>
     <string name="add_property_btn">Ajouter ce bien</string>
-    <string name="add_property_proximity">Lieux proches :</string>
+    <string name="add_property_proximity">Lieux proches</string>
     <string name="add_property_status">Status</string>
     <string name="property_status">status of the property</string>
     <string name="add_property_status_date">le</string>
@@ -86,4 +86,10 @@
     <string name="simulator_result_third_part">par mois !</string>
     <string name="amount">Montant</string>
     <string name="chose_money">Choisissez une devise</string>
+    <string name="property_photos">property photos</string>
+    <string name="action_map">Map</string>
+    <string name="action_add_property">Ajouter un bien</string>
+    <string name="action_show_settings">Parametres</string>
+    <string name="action_back">Retourner à l\'accueil</string>
+    <string name="reset_filters">reset the filters</string>
 </resources>

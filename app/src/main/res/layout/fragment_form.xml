@@ -8,57 +8,22 @@
     android:orientation="vertical"
     tools:context=".fragments.FormFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:gravity="top"
-        android:minHeight="?attr/actionBarSize"
-        android:padding="5dp"
-        android:theme="?attr/actionBarTheme">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_toStartOf="@+id/search_icon"
-            android:ellipsize="marquee"
-            android:maxLines="1"
-            android:text="@string/add_property_title"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/form_header_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_button_description"
-            android:src="@drawable/icon_close" />
-
-    </androidx.appcompat.widget.Toolbar>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="20dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -66,27 +31,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_border"
-                    android:drawableStart="@drawable/icon_house"
-                    android:drawablePadding="10dp"
                     android:ellipsize="marquee"
                     android:gravity="center"
-                    android:maxLines="1"
-                    android:padding="15dp"
                     android:hint="@string/add_property_type"
-                    android:textColorHint="@color/grayedText"
+                    android:maxLines="1"
+                    android:padding="10dp"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColorHint="@color/grayedText"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:backgroundTintMode="add"
+                    app:icon="@drawable/icon_house"
+                    app:iconGravity="start"
+                    app:iconPadding="0dp" />
 
                 <EditText
                     android:id="@+id/add_property_price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
                     android:autofillHints="input"
                     android:background="@drawable/bottom_border"
@@ -95,9 +63,10 @@
                     android:gravity="center"
                     android:hint="@string/add_property_price"
                     android:inputType="numberDecimal"
-                    android:padding="15dp"
+                    android:padding="16dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -113,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
                     android:autofillHints="input"
                     android:background="@drawable/bottom_border"
@@ -122,16 +91,17 @@
                     android:gravity="center"
                     android:hint="@string/add_property_surface"
                     android:inputType="number"
-                    android:padding="15dp"
+                    android:padding="16dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/add_property_rooms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
                     android:autofillHints="input"
                     android:background="@drawable/bottom_border"
@@ -140,9 +110,10 @@
                     android:gravity="center"
                     android:hint="@string/add_property_rooms"
                     android:inputType="number"
-                    android:padding="15dp"
+                    android:padding="16dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -154,15 +125,19 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_photo"
                 android:gravity="center"
-                android:padding="15dp"
                 android:hint="@string/add_property_photos"
-                android:textColorHint="@color/grayedText"
+                android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColorHint="@color/grayedText"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/icon_photo"
+                app:iconGravity="start"
+                app:iconPadding="0dp" />
 
             <LinearLayout
                 android:id="@+id/selected_photos_layout"
@@ -178,22 +153,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginTop="13dp"
                 android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_desc"
-                android:drawableEnd="@drawable/icon_dropdown"
-                android:drawablePadding="5dp"
                 android:ellipsize="marquee"
                 android:gravity="center"
-                android:maxLines="1"
-                android:padding="15dp"
                 android:hint="@string/add_property_desc"
-                android:textColorHint="@color/grayedText"
+                android:maxLines="1"
+                android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColorHint="@color/grayedText"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/icon_desc"
+                app:iconGravity="start"
+                app:iconPadding="0dp" />
 
             <EditText
                 android:id="@+id/add_property_desc_editText"
@@ -217,28 +194,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
                 android:layout_marginEnd="20dp"
                 android:autofillHints="input"
                 android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_checklist"
                 android:gravity="center"
                 android:hint="@string/proximity_place"
-                android:textColorHint="@color/grayedText"
                 android:padding="15dp"
-                android:textColor="@color/white"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/grayedText"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/icon_checklist"
+                app:iconGravity="start"
+                app:iconPadding="0dp"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/form_proximity_places_chip_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 app:chipSpacing="3dp"
                 app:chipSpacingVertical="-5dp"
-                app:singleLine="false"
-                android:layout_margin="5dp"/>
+                app:singleLine="false" />
 
             <EditText
                 android:id="@+id/add_property_realEstate_agent"
@@ -253,21 +234,22 @@
                 android:padding="15dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grayedText"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <fragment
                 android:id="@+id/autocomplete_fragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+                android:layout_marginTop="13dp" />
 
             <fragment
                 android:id="@+id/confirmation_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="10dp"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:id="@+id/add_property_btn"

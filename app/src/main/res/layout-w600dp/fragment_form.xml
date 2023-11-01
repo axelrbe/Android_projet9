@@ -8,65 +8,36 @@
     android:orientation="vertical"
     tools:context=".fragments.FormFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:gravity="top"
-        android:minHeight="?attr/actionBarSize"
-        android:padding="5dp"
-        android:theme="?attr/actionBarTheme">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_toStartOf="@+id/search_icon"
-            android:ellipsize="marquee"
-            android:maxLines="1"
-            android:text="@string/add_property_title"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/form_header_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_button_description"
-            android:src="@drawable/icon_close" />
-
-    </androidx.appcompat.widget.Toolbar>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="30dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/add_property_type"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="50dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_border"
-                    android:drawableStart="@drawable/icon_house"
+                    app:backgroundTint="@null"
+                    app:backgroundTintMode="add"
+                    app:icon="@drawable/icon_house"
+                    app:iconGravity="start"
+                    app:iconPadding="0dp"
                     android:gravity="center"
                     android:hint="@string/add_property_type"
                     android:padding="10dp"
@@ -81,7 +52,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="50dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:autofillHints="input"
                     android:background="@drawable/bottom_border"
@@ -100,7 +70,6 @@
                     android:id="@+id/add_property_surface"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:autofillHints="input"
                     android:background="@drawable/bottom_border"
@@ -178,10 +147,14 @@
                         android:id="@+id/add_property_proximity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:autofillHints="input"
                         android:background="@drawable/bottom_border"
-                        android:drawableStart="@drawable/icon_checklist"
+                        app:backgroundTint="@null"
+                        app:backgroundTintMode="add"
+                        app:icon="@drawable/icon_checklist"
+                        app:iconGravity="start"
+                        app:iconPadding="0dp"
                         android:gravity="center"
                         android:hint="@string/proximity_place"
                         android:padding="15dp"
@@ -212,11 +185,13 @@
                         android:id="@+id/add_property_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/bottom_border"
-                        android:drawableStart="@drawable/icon_desc"
-                        android:drawableEnd="@drawable/icon_dropdown"
-                        android:drawablePadding="5dp"
+                        app:backgroundTint="@null"
+                        app:backgroundTintMode="add"
+                        app:icon="@drawable/icon_desc"
+                        app:iconGravity="start"
+                        app:iconPadding="0dp"
                         android:ellipsize="marquee"
                         android:gravity="center"
                         android:hint="@string/add_property_desc"
@@ -254,7 +229,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_border"
-                android:drawableStart="@drawable/icon_photo"
+                app:backgroundTint="@null"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/icon_photo"
+                app:iconGravity="start"
+                app:iconPadding="0dp"
                 android:gravity="center"
                 android:hint="@string/add_property_photos"
                 android:padding="15dp"

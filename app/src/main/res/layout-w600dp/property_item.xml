@@ -6,20 +6,21 @@
     android:layout_margin="5dp"
     android:backgroundTint="@color/white"
     app:cardCornerRadius="8dp"
-    app:cardElevation="10dp">
+    app:cardElevation="10dp"
+    android:id="@+id/cardView_item_property_list">
 
     <LinearLayout
+        android:id="@+id/property_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.openclassrooms.realestatemanager.customView.NamedImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/property_item_custom_image"
-            android:layout_width="85dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_margin="3dp"
-            android:src="@color/grayedText"
-            app:shapeAppearanceOverlay="@style/roundedImageView" />
+            android:layout_margin="5dp"
+            app:shapeAppearanceOverlay="@style/roundedImageView"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,6 +29,7 @@
             android:gravity="center">
 
             <RelativeLayout
+                android:id="@+id/relativeLayout_type_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -46,8 +48,7 @@
                     android:text="@string/add_property_type"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="true"/>
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/property_item_price"

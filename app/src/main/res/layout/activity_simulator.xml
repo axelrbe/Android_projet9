@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/activity_simulator"
     tools:context=".ui.SimulatorActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -24,7 +25,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/menu_button_description"
             android:padding="10dp"
-            android:src="@drawable/icon_arrow_back" />
+            android:src="@drawable/icon_purple_arrow_back" />
 
     </androidx.appcompat.widget.Toolbar>
 

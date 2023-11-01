@@ -1,54 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MapFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragments.MapFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/secondaryPurple"
-        android:gravity="top"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="marquee"
-            android:maxLines="1"
-            android:text="@string/property_map"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+</FrameLayout>
 
-        <ImageButton
-            android:id="@+id/map_fragment_arrow_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_button_description"
-            android:padding="15dp"
-            android:src="@drawable/icon_close" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <FrameLayout
-        android:id="@+id/map_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/map_fragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
-
-</LinearLayout>

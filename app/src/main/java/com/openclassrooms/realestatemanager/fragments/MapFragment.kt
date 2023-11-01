@@ -64,11 +64,6 @@ class MapFragment : Fragment() {
             PropertyViewModelFactory(propertyRepository, requireActivity().application)
         )[PropertyViewModel::class.java]
 
-        binding.mapFragmentArrowBack.setOnClickListener {
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            fragmentManager.popBackStack()
-        }
-
         addMarkersToMap()
         moveCameraToTheCurrentLocation()
     }

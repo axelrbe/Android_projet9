@@ -120,10 +120,6 @@ class FormFragment : Fragment() {
             builder.show()
         }
 
-        binding.formHeaderClose.setOnClickListener {
-            fragmentManager.popBackStack()
-        }
-
         addNewProperty()
         addPopupMenuForType()
         addEditTextForDescription()
@@ -142,15 +138,19 @@ class FormFragment : Fragment() {
 
         val editText = autocompleteFragment.view?.findViewById<EditText>(R.id.places_autocomplete_search_input)
         val imageView = autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_search_button)
+        val imageViewCloseBtn = autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_clear_button)
 
         editText?.hint = ContextCompat.getString(requireContext(), R.string.add_property_address)
         editText?.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.grayedText))
         editText?.setTextColor(Color.WHITE)
+        editText?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
         editText?.gravity = Gravity.CENTER
         editText?.textSize = 18F
         editText?.setTypeface(null, Typeface.BOLD)
         imageView?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_address))
         imageView?.setColorFilter(Color.WHITE)
+        imageView?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
+        imageViewCloseBtn?.setColorFilter(Color.WHITE)
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
@@ -179,13 +179,13 @@ class FormFragment : Fragment() {
 
     private fun addNewProperty() {
         binding.addPropertyBtn.setOnClickListener {
-            val propertyType: String = binding.addPropertyType.text.toString()
-            val propertyPrice: Long = binding.addPropertyPrice.text.toString().toLong()
-            val propertySurface: Long = binding.addPropertySurface.text.toString().toLong()
-            val propertyRooms: Int = binding.addPropertyRooms.text.toString().toInt()
-            val propertyDesc: String = binding.addPropertyDesc.text.toString()
-            val propertyPhotos: List<Property.Photo> = selectedPhotos
-            val propertyRealEstateAgent: String = binding.addPropertyRealEstateAgent.text.toString()
+            val propertyType = binding.addPropertyType.text.toString()
+            val propertyPrice = binding.addPropertyPrice.text.toString().toLong()
+            val propertySurface = binding.addPropertySurface.text.toString().toLong()
+            val propertyRooms = binding.addPropertyRooms.text.toString().toInt()
+            val propertyDesc = binding.addPropertyDesc.text.toString()
+            val propertyPhotos = selectedPhotos
+            val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
             val todayDate = Utils.todayDate
 
             val newProperty = Property(
@@ -324,23 +324,23 @@ class FormFragment : Fragment() {
 
     private fun createNameDialog(imgUri: Uri?): AlertDialog {
         val nameEditText = EditText(context)
-        nameEditText.hint = "Enter photo name"
+        nameEditText.hint = "Donner un nom à cette photo"
         nameEditText.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Enter photo name")
+            .setTitle("Nom de la photo")
             .setView(nameEditText)
-            .setPositiveButton("OK") { dialog, _ ->
+            .setPositiveButton("valider") { dialog, _ ->
                 val name = nameEditText.text.toString()
                 val photo = Property.Photo(uri = imgUri.toString(), name = name)
                 selectedPhotos.add(photo)
                 updateSelectedPhotos()
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("Annuler") { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
