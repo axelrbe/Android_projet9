@@ -5,13 +5,13 @@
         android:title="@string/college" />
     <item
         android:id="@+id/proximity_popup_lycée"
-        android:title="@string/lycee" />
+        android:title="@string/high_school" />
     <item
         android:id="@+id/proximity_popup_primaire"
         android:title="@string/primary" />
     <item
         android:id="@+id/proximity_popup_garderie"
-        android:title="@string/garderie" />
+        android:title="@string/nursery" />
     <item
         android:id="@+id/proximity_popup_commerce"
         android:title="@string/shops" />

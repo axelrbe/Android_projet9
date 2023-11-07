@@ -11,16 +11,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.application.RealEstateApplication
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.fragments.FormFragment
 import com.openclassrooms.realestatemanager.fragments.MapFragment
+import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.viewModel.CurrencyViewModel
+import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
+import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
+import kotlinx.coroutines.launch
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var currencyViewModel: CurrencyViewModel
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var propertyViewModel: PropertyViewModel
+    private lateinit var propertyRepository: PropertyRepository
+    private lateinit var propertyDao: PropertyDao
+    private lateinit var formFragment: FormFragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +44,41 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setTitleTextColor(Color.WHITE)
         binding.toolbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
 
+        formFragment = FormFragment()
         fragmentManager = (this as AppCompatActivity).supportFragmentManager
         currencyViewModel = ViewModelProvider(this)[CurrencyViewModel::class.java]
+
+        binding.noPropertyAddBtn?.setOnClickListener {
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, formFragment)
+                .addToBackStack("PropertyListFragment")
+                .commit()
+        }
+
+        propertyDao = RealEstateApplication.getInstance(this).propertyDao()
+        propertyRepository = PropertyRepository(propertyDao)
+        propertyViewModel = ViewModelProvider(
+            this,
+            PropertyViewModelFactory(propertyRepository, this.application)
+        )[PropertyViewModel::class.java]
+        lifecycleScope.launch {
+            propertyViewModel.getPropertyList().collect { properties ->
+                if (properties.isEmpty()) {
+                    binding.noPropertyAlertContainer?.visibility = View.VISIBLE
+                } else {
+                    binding.noPropertyAlertContainer?.visibility = View.GONE
+                }
+            }
+        }
+
+        val currentLocale = Locale.getDefault().language
+        val config = resources.configuration
+        if (currentLocale == "en") {
+            config.setLocale(Locale.ENGLISH)
+        } else {
+            config.setLocale(Locale.FRENCH)
+        }
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         R.id.action_add_property -> {
-            val formFragment = FormFragment()
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, formFragment)
                 .addToBackStack("PropertyListFragment")

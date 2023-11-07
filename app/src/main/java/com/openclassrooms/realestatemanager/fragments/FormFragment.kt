@@ -89,37 +89,7 @@ class FormFragment : Fragment() {
             PropertyViewModelFactory(propertyRepository, requireActivity().application)
         )[PropertyViewModel::class.java]
 
-        binding.addPropertyPhotos.setOnClickListener {
-            val options = arrayOf<CharSequence>(
-                getString(R.string.photos_choice_camera),
-                getString(R.string.photos_choice_gallery), getString(R.string.cancel)
-            )
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.add_photos_title))
-            builder.setItems(options) { dialog, item ->
-                when {
-                    options[item] == getString(R.string.photos_choice_camera) -> {
-                        val packageManager = context?.packageManager
-                        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
-                            getImageFromCamera.launch(takePicture)
-                        }
-                    }
-
-                    options[item] == getString(R.string.photos_choice_gallery) -> {
-                        val pickImg = Intent(Intent.ACTION_GET_CONTENT)
-                        pickImg.type = "image/*"
-                        getImageFromGallery.launch(pickImg)
-                    }
-
-                    options[item] == getString(R.string.cancel) -> {
-                        dialog.dismiss()
-                    }
-                }
-            }
-            builder.show()
-        }
-
+        showDialogForPhotos()
         addNewProperty()
         addPopupMenuForType()
         addEditTextForDescription()
@@ -127,102 +97,83 @@ class FormFragment : Fragment() {
         autoCompleteFragmentManagement()
     }
 
-    private fun autoCompleteFragmentManagement() {
-        Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
-        placesClient = Places.createClient(requireContext())
+    private fun validateFormFields(): Boolean {
+        val propertyType = binding.addPropertyType.text.toString()
+        val propertyPrice = binding.addPropertyPrice.text.toString().toLongOrNull()
+        val propertySurface = binding.addPropertySurface.text.toString().toLongOrNull()
+        val propertyRooms = binding.addPropertyRooms.text.toString().toIntOrNull()
+        val propertyDesc = binding.addPropertyDesc.text.toString()
+        val propertyPhotos = selectedPhotos
+        val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
+        val todayDate = Utils.todayDate
 
-        val autocompleteFragment =
-            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
-        autocompleteFragment.setTypesFilter(listOf(PlaceTypes.ADDRESS))
-
-        val editText = autocompleteFragment.view?.findViewById<EditText>(R.id.places_autocomplete_search_input)
-        val imageView = autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_search_button)
-        val imageViewCloseBtn = autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_clear_button)
-
-        editText?.hint = ContextCompat.getString(requireContext(), R.string.add_property_address)
-        editText?.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.grayedText))
-        editText?.setTextColor(Color.WHITE)
-        editText?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
-        editText?.gravity = Gravity.CENTER
-        editText?.textSize = 18F
-        editText?.setTypeface(null, Typeface.BOLD)
-        imageView?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_address))
-        imageView?.setColorFilter(Color.WHITE)
-        imageView?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
-        imageViewCloseBtn?.setColorFilter(Color.WHITE)
-
-        // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                selectedAddress = place.name
-                selectedAddressLatLng = place.latLng
-
-                // Add a marker to the map and move the camera to the selected place
-                googleMap.clear()
-                googleMap.addMarker(MarkerOptions().position(selectedAddressLatLng!!).title(selectedAddress))
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedAddressLatLng!!, 15f))
-
-                Log.i("GettingPlacesInfo", "Place: ${place.name}, ${place.id}, ${place.latLng}")
-            }
-
-            override fun onError(status: Status) {
-                Log.i("GettingPlacesInfo", "An error occurred: $status")
-            }
-        })
-
-        mapFragment = childFragmentManager.findFragmentById(R.id.confirmation_map) as SupportMapFragment
-        mapFragment.getMapAsync { map ->
-            googleMap = map
-        }
+        return (
+                propertyType.isNotEmpty() &&
+                        propertyPrice != null &&
+                        propertySurface != null &&
+                        propertyRooms != null &&
+                        propertyDesc.isNotEmpty() &&
+                        propertyPhotos.isNotEmpty() &&
+                        propertyRealEstateAgent.isNotEmpty() &&
+                        todayDate.isNotEmpty()
+                )
     }
 
     private fun addNewProperty() {
         binding.addPropertyBtn.setOnClickListener {
-            val propertyType = binding.addPropertyType.text.toString()
-            val propertyPrice = binding.addPropertyPrice.text.toString().toLong()
-            val propertySurface = binding.addPropertySurface.text.toString().toLong()
-            val propertyRooms = binding.addPropertyRooms.text.toString().toInt()
-            val propertyDesc = binding.addPropertyDesc.text.toString()
-            val propertyPhotos = selectedPhotos
-            val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
-            val todayDate = Utils.todayDate
+            if (validateFormFields()) {
+                val propertyType = binding.addPropertyType.text.toString()
+                val propertyPrice = binding.addPropertyPrice.text.toString().toLong()
+                val propertySurface = binding.addPropertySurface.text.toString().toLong()
+                val propertyRooms = binding.addPropertyRooms.text.toString().toInt()
+                val propertyDesc = binding.addPropertyDesc.text.toString()
+                val propertyPhotos = selectedPhotos
+                val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
+                val todayDate = Utils.todayDate
 
-            val newProperty = Property(
-                type = propertyType,
-                price = propertyPrice,
-                surface = propertySurface,
-                rooms = propertyRooms,
-                desc = propertyDesc,
-                photos = propertyPhotos,
-                address = selectedAddress.toString(),
-                location = selectedAddressLatLng,
-                proximityPlaces = getPopupMenuSelectedItems(),
-                status = getString(R.string.property_for_sale),
-                entryDate = todayDate,
-                soldDate = null,
-                realEstateAgent = propertyRealEstateAgent
-            )
+                val newProperty = Property(
+                    type = propertyType,
+                    price = propertyPrice,
+                    surface = propertySurface,
+                    rooms = propertyRooms,
+                    desc = propertyDesc,
+                    photos = propertyPhotos,
+                    address = selectedAddress.toString(),
+                    location = selectedAddressLatLng,
+                    proximityPlaces = getPopupMenuSelectedItems(),
+                    status = getString(R.string.for_sale),
+                    entryDate = todayDate,
+                    soldDate = "",
+                    realEstateAgent = propertyRealEstateAgent
+                )
 
-            try {
-                Log.i("addressLatLng", "addNewProperty: $selectedAddressLatLng")
-                propertyViewModel.addProperty(newProperty)
-                "Type".also { binding.addPropertyType.text = it }
-                binding.addPropertyPrice.setText("")
-                binding.addPropertySurface.setText("")
-                binding.addPropertyRooms.setText("")
-                "Description".also { binding.addPropertyDesc.text = it }
-                binding.selectedPhotosLayout.visibility = View.GONE
-                binding.addPropertyRealEstateAgent.setText("")
-                Toast.makeText(context, getString(R.string.success_add_property), Toast.LENGTH_SHORT).show()
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(context, getString(R.string.failed_add_property), Toast.LENGTH_SHORT).show()
+                try {
+                    Log.i("addressLatLng", "addNewProperty: $selectedAddressLatLng")
+                    propertyViewModel.addProperty(newProperty)
+                    "Type".also { binding.addPropertyType.text = it }
+                    binding.addPropertyPrice.setText("")
+                    binding.addPropertySurface.setText("")
+                    binding.addPropertyRooms.setText("")
+                    "Description".also { binding.addPropertyDesc.text = it }
+                    binding.selectedPhotosLayout.visibility = View.GONE
+                    binding.addPropertyRealEstateAgent.setText("")
+                    Toast.makeText(context, getString(R.string.success_add_property), Toast.LENGTH_SHORT).show()
+                } catch (e: IllegalArgumentException) {
+                    Toast.makeText(context, getString(R.string.failed_add_property), Toast.LENGTH_SHORT).show()
+                }
+                fragmentManager.popBackStack()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.empty_fields_error_msg),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            fragmentManager.popBackStack()
         }
     }
 
     private fun addPopupMenuForProximityPlaces() {
+        val tabletSize = resources.getBoolean(R.bool.isTablet)
         binding.addPropertyProximity.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), binding.addPropertyProximity)
             popupMenu.inflate(R.menu.proximity_popup_menu)
@@ -238,7 +189,11 @@ class FormFragment : Fragment() {
                     chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
                     chip.setChipBackgroundColorResource(R.color.white)
                     chip.setTypeface(null, Typeface.BOLD)
-                    chip.textSize = 18F
+                    if (tabletSize) {
+                        chip.textSize = 20F
+                    } else {
+                        chip.textSize = 18F
+                    }
                     chipGroup.addView(chip)
                 } else {
                     val toast = Toast.makeText(context, R.string.already_selected_proximity_place, Toast.LENGTH_SHORT)
@@ -300,6 +255,38 @@ class FormFragment : Fragment() {
         })
     }
 
+    private fun showDialogForPhotos() {
+        binding.addPropertyPhotos.setOnClickListener {
+            val options = arrayOf<CharSequence>(
+                getString(R.string.photos_choice_camera),
+                getString(R.string.photos_choice_gallery), getString(R.string.cancel)
+            )
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(getString(R.string.add_photos_title))
+            builder.setItems(options) { dialog, item ->
+                when {
+                    options[item] == getString(R.string.photos_choice_camera) -> {
+                        val packageManager = context?.packageManager
+                        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
+                            getImageFromCamera.launch(takePicture)
+                        }
+                    }
+
+                    options[item] == getString(R.string.photos_choice_gallery) -> {
+                        val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        getImageFromGallery.launch(pickImg)
+                    }
+
+                    options[item] == getString(R.string.cancel) -> {
+                        dialog.dismiss()
+                    }
+                }
+            }
+            builder.show()
+        }
+    }
+
     private val selectedPhotos = ArrayList<Property.Photo>()
     private val getImageFromGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -324,7 +311,7 @@ class FormFragment : Fragment() {
 
     private fun createNameDialog(imgUri: Uri?): AlertDialog {
         val nameEditText = EditText(context)
-        nameEditText.hint = "Donner un nom à cette photo"
+        nameEditText.hint = getString(R.string.photo_name_editText)
         nameEditText.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -333,14 +320,14 @@ class FormFragment : Fragment() {
         return AlertDialog.Builder(requireContext())
             .setTitle("Nom de la photo")
             .setView(nameEditText)
-            .setPositiveButton("valider") { dialog, _ ->
+            .setPositiveButton(getString(R.string.validate)) { dialog, _ ->
                 val name = nameEditText.text.toString()
                 val photo = Property.Photo(uri = imgUri.toString(), name = name)
                 selectedPhotos.add(photo)
                 updateSelectedPhotos()
                 dialog.dismiss()
             }
-            .setNegativeButton("Annuler") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
@@ -353,7 +340,8 @@ class FormFragment : Fragment() {
             val namedImageView = context?.let { NamedImageView(it, null) }
             namedImageView?.setImageUri(Uri.parse(photo.uri))
             namedImageView?.setText(photo.name)
-            namedImageView?.layoutParams = LinearLayout.LayoutParams(300, 300
+            namedImageView?.layoutParams = LinearLayout.LayoutParams(
+                300, 300
             ).apply {
                 setMargins(0, 0, 20, 0)
             }
@@ -391,5 +379,56 @@ class FormFragment : Fragment() {
             "${context?.packageName}.provider",
             file
         )
+    }
+
+    private fun autoCompleteFragmentManagement() {
+        Places.initialize(requireContext(), BuildConfig.MAPS_API_KEY)
+        placesClient = Places.createClient(requireContext())
+
+        val autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
+        autocompleteFragment.setTypesFilter(listOf(PlaceTypes.ADDRESS))
+
+        val editText = autocompleteFragment.view?.findViewById<EditText>(R.id.places_autocomplete_search_input)
+        val imageView = autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_search_button)
+        val imageViewCloseBtn =
+            autocompleteFragment.view?.findViewById<ImageView>(R.id.places_autocomplete_clear_button)
+
+        editText?.hint = ContextCompat.getString(requireContext(), R.string.add_property_address)
+        editText?.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.grayedText))
+        editText?.setTextColor(Color.WHITE)
+        editText?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
+        editText?.gravity = Gravity.CENTER
+        editText?.textSize = 18F
+        editText?.setTypeface(null, Typeface.BOLD)
+        imageView?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_address))
+        imageView?.setColorFilter(Color.WHITE)
+        imageView?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bottom_border)
+        imageViewCloseBtn?.setColorFilter(Color.WHITE)
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                selectedAddress = place.name
+                selectedAddressLatLng = place.latLng
+
+                // Add a marker to the map and move the camera to the selected place
+                googleMap.clear()
+                googleMap.addMarker(MarkerOptions().position(selectedAddressLatLng!!).title(selectedAddress))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedAddressLatLng!!, 15f))
+
+                Log.i("GettingPlacesInfo", "Place: ${place.name}, ${place.id}, ${place.latLng}")
+            }
+
+            override fun onError(status: Status) {
+                Log.i("GettingPlacesInfo", "An error occurred: $status")
+            }
+        })
+
+        mapFragment = childFragmentManager.findFragmentById(R.id.confirmation_map) as SupportMapFragment
+        mapFragment.getMapAsync { map ->
+            googleMap = map
+        }
     }
 }

@@ -19,7 +19,7 @@ class SimulatorActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.simulatorArrowBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         displayMonthlyPayment()

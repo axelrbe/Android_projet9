@@ -11,7 +11,7 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/custom_window_image"
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:src="@color/secondaryPurple"
         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/secondaryPurple"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             tools:text="type" />
 
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/secondaryPurple"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:text="address" />
 
         <LinearLayout
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/secondaryPurple"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 tools:text="surface" />
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryPurple"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 tools:text="price" />
 
         </LinearLayout>

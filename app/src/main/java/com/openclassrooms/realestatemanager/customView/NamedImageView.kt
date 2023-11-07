@@ -18,6 +18,7 @@ class NamedImageView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         LayoutInflater.from(context).inflate(R.layout.custom_named_imageview, this, true)
         imageView = findViewById(R.id.custom_view_image_view)
         textView = findViewById(R.id.custom_view_text_view)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 
     fun setImageUri(uri: Uri) {

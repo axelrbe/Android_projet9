@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 import com.google.android.gms.maps.model.LatLng
 import com.openclassrooms.realestatemanager.utils.Converters
 import kotlinx.parcelize.Parcelize
-import java.util.Date
+
 
 @Parcelize
 @Entity(tableName = "properties")
@@ -23,7 +23,7 @@ data class Property(
     val proximityPlaces: List<String>,
     val status: String,
     val entryDate: String,
-    val soldDate: Date?,
+    val soldDate: String,
     val realEstateAgent: String,
     @TypeConverters(Converters.PhotoListConverter::class)
     val photos: List<Photo>

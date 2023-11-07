@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/type_popup_apartment"
-        android:title="@string/appartment" />
+        android:title="@string/apartment" />
     <item
         android:id="@+id/type_popup_house"
         android:title="@string/house" />

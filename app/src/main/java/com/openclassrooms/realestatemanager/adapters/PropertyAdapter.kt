@@ -42,6 +42,7 @@ class PropertyAdapter(var isEuro: Boolean) :
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
         val currentProperty = getItem(position)
         holder.itemView.apply {
+            // Change colors of current property if it's tablet size
             val tabletSize = resources.getBoolean(R.bool.isTablet)
             if(tabletSize) {
                 if (position == selectedPosition) {
@@ -73,6 +74,7 @@ class PropertyAdapter(var isEuro: Boolean) :
                 }
             }
 
+            // Binding infos to the views
             holder.propertyItemType.text = currentProperty.type
             """${currentProperty.surface}m²""".also { holder.propertyItemSurface.text = it }
             (currentProperty.rooms.toString() + " " + context.getString(R.string.rooms)).also {
@@ -110,9 +112,10 @@ class PropertyAdapter(var isEuro: Boolean) :
                 }
             }
 
+            // Details fragment management
             holder.itemView.setOnClickListener {
                 val previousPosition = selectedPosition
-                selectedPosition = holder.adapterPosition
+                selectedPosition = holder.bindingAdapterPosition
                 notifyItemChanged(selectedPosition)
                 if (previousPosition != RecyclerView.NO_POSITION) {
                     notifyItemChanged(previousPosition)

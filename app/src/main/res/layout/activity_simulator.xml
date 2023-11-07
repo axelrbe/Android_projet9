@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_simulator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/activity_simulator"
     tools:context=".ui.SimulatorActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -21,8 +21,8 @@
             android:id="@+id/simulator_arrow_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
             android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/menu_button_description"
             android:padding="10dp"
             android:src="@drawable/icon_purple_arrow_back" />
@@ -35,8 +35,8 @@
         android:layout_gravity="center"
         android:text="@string/chose_money"
         android:textColor="@color/secondaryPurple"
-        android:textStyle="bold"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -182,29 +182,20 @@
 
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
+    <Button
+        android:id="@+id/simulator_simulate_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:layout_gravity="end"
         android:layout_marginEnd="20dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp">
+        android:padding="10dp"
+        android:text="@string/simulate"
+        android:textAllCaps="false"
+        android:textColor="@color/primaryPurple"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/simulator_simulate_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:drawableEnd="@drawable/icon_send"
-            android:drawablePadding="10dp"
-            android:padding="10dp"
-            android:text="@string/simulate"
-            android:textAllCaps="false"
-            android:textColor="@color/primaryPurple"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/simulator_result_container"

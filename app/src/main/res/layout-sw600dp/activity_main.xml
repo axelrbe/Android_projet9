@@ -64,6 +64,37 @@
                     android:layout_height="match_parent"
                     tools:layout="@layout/fragment_details" />
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/no_property_alert_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/no_property_textView"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_property_alert"
+                        android:layout_gravity="center"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        app:drawableTopCompat="@drawable/icon_interdiction" />
+
+                    <Button
+                        android:id="@+id/no_property_add_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginBottom="40dp"
+                        android:text="@string/create_property"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"/>
+
+                </androidx.cardview.widget.CardView>
+
+
             </FrameLayout>
 
         </LinearLayout>

@@ -5,21 +5,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.openclassrooms.realestatemanager.models.Property
-import java.util.Date
 
 
 class Converters {
-    class DateTypeConverter {
-        @TypeConverter
-        fun fromTimestamp(value: Long?): Date? {
-            return value?.let { Date(it) }
-        }
-
-        @TypeConverter
-        fun dateToTimestamp(date: Date?): Long? {
-            return date?.time
-        }
-    }
     class StringListTypeConverter {
         @TypeConverter
         fun fromString(value: String?): List<String>? {

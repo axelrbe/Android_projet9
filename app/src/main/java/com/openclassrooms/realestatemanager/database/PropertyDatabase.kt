@@ -9,7 +9,6 @@ import com.openclassrooms.realestatemanager.utils.Converters
 
 @Database(entities = [Property::class], version = 1)
 @TypeConverters(
-    Converters.DateTypeConverter::class,
     Converters.StringListTypeConverter::class,
     Converters.LatLngTypeConverter::class,
     Converters.PhotoListConverter::class

@@ -51,7 +51,7 @@ class DetailsFragment : Fragment() {
     private fun loadPropertyData() {
         val property = arguments?.getParcelable<Property>("property")
 
-        binding.detailsPropertyType?.text  = property?.type
+        binding.detailsPropertyType?.text = property?.type
         "${property?.surface.toString()}m²".also { binding.detailsPropertySurface.text = it }
         binding.detailsPropertyRooms.text = property?.rooms.toString()
         binding.detailsPropertyDesc.text = property?.desc
@@ -79,6 +79,7 @@ class DetailsFragment : Fragment() {
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryPurple))
             chip.setChipBackgroundColorResource(R.color.white)
             chip.setTypeface(null, Typeface.BOLD)
+            chip.textSize = 18F
             chipGroup.addView(chip)
         }
 

@@ -24,7 +24,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:contentDescription="@string/menu_button_description"
-            android:padding="10dp"
+            android:padding="16dp"
             android:src="@drawable/icon_purple_arrow_back" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -105,7 +105,7 @@
                     android:drawablePadding="-20dp"
                     android:hint="@string/amount"
                     android:inputType="number"
-                    android:padding="10dp"
+                    android:padding="16dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
@@ -132,7 +132,7 @@
                     android:drawablePadding="-20dp"
                     android:hint="@string/contribution"
                     android:inputType="number"
-                    android:padding="10dp"
+                    android:padding="16dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
@@ -167,7 +167,7 @@
                     android:drawablePadding="-20dp"
                     android:hint="@string/rate"
                     android:inputType="number"
-                    android:padding="10dp"
+                    android:padding="16dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
@@ -193,7 +193,7 @@
                     android:drawablePadding="-20dp"
                     android:hint="@string/duration"
                     android:inputType="text|number"
-                    android:padding="10dp"
+                    android:padding="16dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grayedText"
@@ -206,27 +206,18 @@
 
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
+    <Button
+        android:id="@+id/simulator_simulate_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp">
-
-        <Button
-            android:id="@+id/simulator_simulate_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:padding="20dp"
-            android:text="@string/simulate"
-            android:textAllCaps="false"
-            android:textColor="@color/primaryPurple"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-    </androidx.cardview.widget.CardView>
+        android:backgroundTint="@color/white"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:text="@string/simulate"
+        android:textAllCaps="false"
+        android:textColor="@color/primaryPurple"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/simulator_result_container"

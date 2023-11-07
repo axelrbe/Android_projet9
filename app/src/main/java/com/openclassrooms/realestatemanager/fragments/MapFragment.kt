@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.imageview.ShapeableImageView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.application.RealEstateApplication
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao
@@ -113,6 +115,12 @@ class MapFragment : Fragment() {
                                     }
                                     view.findViewById<TextView>(R.id.custom_window_property_price).text = price
                                 }
+
+                                Glide.with(requireContext())
+                                    .load(currentProperty.photos[0].uri)
+                                    .centerCrop()
+                                    .into(view.findViewById<ShapeableImageView>(R.id.custom_window_image))
+
                                 return view
                             }
                         })
