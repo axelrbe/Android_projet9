@@ -53,7 +53,7 @@ class SimulatorActivity : AppCompatActivity() {
             val totalPaymentInEuro = Utils.convertDollarToEuro(totalPayment.toLong()).toString()
 
             if (isDollar) {
-                (getString(R.string.simulator_result_first_part) + totalPayment + "$ " + getString(R.string.simulator_result_second_part) + " " + monthlyPayment + "$ " + getString(
+                (getString(R.string.simulator_result_first_part) + "$" + totalPayment + " " + getString(R.string.simulator_result_second_part) + " $" + monthlyPayment + " " + getString(
                     R.string.simulator_result_third_part
                 )).also {
                     binding.simulatorResultTextView.text = it

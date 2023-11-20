@@ -120,8 +120,8 @@ class PropertyAdapter(var isEuro: Boolean) :
                 if (previousPosition != RecyclerView.NO_POSITION) {
                     notifyItemChanged(previousPosition)
                 }
-                val fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
+                val fragmentManager = (context as AppCompatActivity).supportFragmentManager
                 if (tabletSize) {
                     val detailFragment = DetailsFragment.newInstance(currentProperty)
                     fragmentManager.beginTransaction()

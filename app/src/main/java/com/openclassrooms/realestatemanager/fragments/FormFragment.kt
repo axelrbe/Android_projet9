@@ -1,9 +1,11 @@
 package com.openclassrooms.realestatemanager.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
@@ -22,6 +24,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -51,6 +54,7 @@ import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentFormBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
+import com.openclassrooms.realestatemanager.ui.MainActivity
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModelFactory
@@ -71,6 +75,9 @@ class FormFragment : Fragment() {
     private lateinit var fragmentManager: FragmentManager
     private var selectedAddress: String? = null
     private var selectedAddressLatLng: LatLng? = null
+    private lateinit var getImageFromGallery: ActivityResultLauncher<Intent>
+    private lateinit var getImageFromCamera: ActivityResultLauncher<Intent>
+    private val selectedPhotos = ArrayList<Property.Photo>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFormBinding.inflate(inflater, container, false)
@@ -89,6 +96,25 @@ class FormFragment : Fragment() {
             PropertyViewModelFactory(propertyRepository, requireActivity().application)
         )[PropertyViewModel::class.java]
 
+        getImageFromGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val imgUri = data?.data
+                val alertDialog = createNameDialog(imgUri)
+                alertDialog.show()
+            }
+        }
+
+        getImageFromCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val bitmap = data?.extras?.get("data") as Bitmap?
+                val imgUri = saveBitmapToFile(bitmap)
+                val alertDialog = createNameDialog(imgUri)
+                alertDialog.show()
+            }
+        }
+
         showDialogForPhotos()
         addNewProperty()
         addPopupMenuForType()
@@ -103,7 +129,6 @@ class FormFragment : Fragment() {
         val propertySurface = binding.addPropertySurface.text.toString().toLongOrNull()
         val propertyRooms = binding.addPropertyRooms.text.toString().toIntOrNull()
         val propertyDesc = binding.addPropertyDesc.text.toString()
-        val propertyPhotos = selectedPhotos
         val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
         val todayDate = Utils.todayDate
 
@@ -113,7 +138,6 @@ class FormFragment : Fragment() {
                         propertySurface != null &&
                         propertyRooms != null &&
                         propertyDesc.isNotEmpty() &&
-                        propertyPhotos.isNotEmpty() &&
                         propertyRealEstateAgent.isNotEmpty() &&
                         todayDate.isNotEmpty()
                 )
@@ -127,6 +151,14 @@ class FormFragment : Fragment() {
                 val propertySurface = binding.addPropertySurface.text.toString().toLong()
                 val propertyRooms = binding.addPropertyRooms.text.toString().toInt()
                 val propertyDesc = binding.addPropertyDesc.text.toString()
+                if (selectedPhotos.isEmpty()) {
+                    val drawableUri =
+                        Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/no_images_found")
+                    val drawableUriString: String = drawableUri.toString()
+                    Log.d("photoUri", "addNewProperty: $drawableUri")
+                    val noPhoto = Property.Photo(uri = drawableUriString, name = "")
+                    selectedPhotos.add(noPhoto)
+                }
                 val propertyPhotos = selectedPhotos
                 val propertyRealEstateAgent = binding.addPropertyRealEstateAgent.text.toString()
                 val todayDate = Utils.todayDate
@@ -148,15 +180,18 @@ class FormFragment : Fragment() {
                 )
 
                 try {
-                    Log.i("addressLatLng", "addNewProperty: $selectedAddressLatLng")
                     propertyViewModel.addProperty(newProperty)
-                    "Type".also { binding.addPropertyType.text = it }
+                    (activity as MainActivity).resetToolbar()
+                    binding.addPropertyType.text = ContextCompat.getString(requireContext(), R.string.add_property_type)
                     binding.addPropertyPrice.setText("")
                     binding.addPropertySurface.setText("")
                     binding.addPropertyRooms.setText("")
-                    "Description".also { binding.addPropertyDesc.text = it }
+                    binding.addPropertyDescEditText.setText("")
                     binding.selectedPhotosLayout.visibility = View.GONE
+                    proximityPlacesSelectedItems.clear()
+                    selectedPhotos.clear()
                     binding.addPropertyRealEstateAgent.setText("")
+
                     Toast.makeText(context, getString(R.string.success_add_property), Toast.LENGTH_SHORT).show()
                 } catch (e: IllegalArgumentException) {
                     Toast.makeText(context, getString(R.string.failed_add_property), Toast.LENGTH_SHORT).show()
@@ -255,6 +290,28 @@ class FormFragment : Fragment() {
         })
     }
 
+    private val requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            val packageManager = context?.packageManager
+            val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
+                getImageFromCamera.launch(takePicture)
+            }
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.camera_permission_denied), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Permission request launcher for storage
+    private val requestStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            getImageFromGallery.launch(pickImg)
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.storage_permission_denied), Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun showDialogForPhotos() {
         binding.addPropertyPhotos.setOnClickListener {
             val options = arrayOf<CharSequence>(
@@ -266,16 +323,28 @@ class FormFragment : Fragment() {
             builder.setItems(options) { dialog, item ->
                 when {
                     options[item] == getString(R.string.photos_choice_camera) -> {
-                        val packageManager = context?.packageManager
-                        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
-                            getImageFromCamera.launch(takePicture)
+                        // Check camera permission before launching the camera
+                        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                            val packageManager = context?.packageManager
+                            val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                            if (packageManager?.let { it1 -> takePicture.resolveActivity(it1) } != null) {
+                                getImageFromCamera.launch(takePicture)
+                            }
+                        } else {
+                            // Request camera permission
+                            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                         }
                     }
 
                     options[item] == getString(R.string.photos_choice_gallery) -> {
-                        val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                        getImageFromGallery.launch(pickImg)
+                        // Check storage permission before launching the gallery
+                        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                            val pickImg = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                            getImageFromGallery.launch(pickImg)
+                        } else {
+                            // Request storage permission
+                            requestStoragePermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+                        }
                     }
 
                     options[item] == getString(R.string.cancel) -> {
@@ -286,29 +355,7 @@ class FormFragment : Fragment() {
             builder.show()
         }
     }
-
-    private val selectedPhotos = ArrayList<Property.Photo>()
-    private val getImageFromGallery =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val data = it.data
-                val imgUri = data?.data
-                val alertDialog = createNameDialog(imgUri)
-                alertDialog.show()
-            }
-        }
-
-    private val getImageFromCamera =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val data = it.data
-                val bitmap = data?.extras?.get("data") as Bitmap?
-                val imgUri = saveBitmapToFile(bitmap)
-                val alertDialog = createNameDialog(imgUri)
-                alertDialog.show()
-            }
-        }
-
+    
     private fun createNameDialog(imgUri: Uri?): AlertDialog {
         val nameEditText = EditText(context)
         nameEditText.hint = getString(R.string.photo_name_editText)
@@ -318,7 +365,7 @@ class FormFragment : Fragment() {
         )
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Nom de la photo")
+            .setTitle(R.string.name_photo)
             .setView(nameEditText)
             .setPositiveButton(getString(R.string.validate)) { dialog, _ ->
                 val name = nameEditText.text.toString()

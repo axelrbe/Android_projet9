@@ -21,11 +21,11 @@ object Utils {
      * @return
      */
     fun convertDollarToEuro(dollars: Long): Int {
-        return (dollars * 0.94345).roundToInt()
+        return (dollars * 0.85 ).roundToInt()
     }
 
     fun convertEuroToDollar(euros: Int): Int {
-        return (euros * 1.32030).roundToInt()
+        return (euros * 1.18).roundToInt()
     }
 
     val todayDate: String

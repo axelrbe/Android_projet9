@@ -3,14 +3,21 @@ package com.openclassrooms.realestatemanager
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -18,17 +25,25 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.gms.maps.model.LatLng
+import com.openclassrooms.realestatemanager.adapters.PropertyAdapter
 import com.openclassrooms.realestatemanager.contentProvider.RealEstateManagerContentProvider
+import com.openclassrooms.realestatemanager.database.PropertyDatabase
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.ui.MainActivity
 import com.openclassrooms.realestatemanager.utils.Utils
-import junit.framework.Assert.assertNotNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.hamcrest.Matchers.equalTo
+import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
 import java.util.Date
 
 /**
@@ -41,6 +56,12 @@ class RealEstateManagerInstrumentedTest {
 
     private lateinit var context: Context
     private lateinit var contentResolver: ContentResolver
+    private lateinit var propertyDao: PropertyDao
+    private lateinit var db: PropertyDatabase
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: PropertyAdapter
+    private lateinit var noPhoto: Drawable
+    private lateinit var photo: Property.Photo
 
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
@@ -49,6 +70,72 @@ class RealEstateManagerInstrumentedTest {
     fun setup() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         contentResolver = context.contentResolver
+
+        db = Room.inMemoryDatabaseBuilder(
+            context, PropertyDatabase::class.java
+        ).build()
+        propertyDao = db.propertyDao()
+
+        activityRule.scenario.onActivity { activity ->
+            recyclerView = activity.findViewById(R.id.properties_recycler_view)
+            noPhoto = activity.getDrawable(R.drawable.no_images_found)!!
+            val uri = Uri.parse("android.resource://com.openclassrooms.realestatemanager/${noPhoto}")
+            Log.d("photoUri", "photo uri is equal to: $uri")
+            photo = Property.Photo(uri.toString(), "no photo found")
+        }
+        adapter = PropertyAdapter(false)
+    }
+
+    @After
+    @Throws(IOException::class)
+    fun closeDb() {
+        db.close()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testingCreationOfPropertyInRoomDatabase() = runBlocking {
+        val property: Property = createProperty()
+        propertyDao.insertProperty(property)
+
+        // Check that the last property of the database matches the property that was just added
+        val lastProperty = propertyDao.getLastProperty()
+        val expectedProperty = lastProperty?.id?.let { property.copy(id = it) }
+        assertThat(expectedProperty, equalTo(lastProperty))
+
+        // Display the items in the RecyclerView
+        activityRule.scenario.onActivity { activity ->
+            activity.runOnUiThread {
+                adapter.submitList(listOf(lastProperty))
+                recyclerView.adapter = adapter
+            }
+        }
+
+        withContext(Dispatchers.IO) {
+            Thread.sleep(5000)
+        }
+
+        // Verify that the new item is displayed in the RecyclerView
+        assertEquals(1, adapter.itemCount)
+        assertEquals(lastProperty, adapter.currentList[0])
+    }
+
+    private fun createProperty(): Property {
+        return Property(
+            type = "House",
+            price = 100000,
+            surface = 100,
+            rooms = 3,
+            desc = "Une super description",
+            address = "1 address street",
+            location = LatLng(0.0, 0.0),
+            proximityPlaces = listOf("sea"),
+            status = "Available",
+            entryDate = "13/11/2023",
+            soldDate = "15/11/2023",
+            realEstateAgent = "Mr Patrick agent",
+            photos = listOf(photo),
+        )
     }
 
     @Test
@@ -59,40 +146,14 @@ class RealEstateManagerInstrumentedTest {
     }
 
     @Test
-    fun testIfOpeningTheMapFragmentIsWorking() {
-        // Click on the map icon in the toolbar
-        onView(withId(R.id.action_map)).perform(click())
-        // Check if the MapFragment is displayed on the screen
-        onView(withId(R.id.map_fragment)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testIfOpeningTheSimulatorActivityIsWorking() {
-        // Click on the "Add Property" button in the toolbar
-        onView(withId(R.id.action_settings)).perform(click())
-        onView(withText("Simulateur immobilier")).perform(click())
-        // Check if the FormFragment is displayed on the screen
-        onView(withId(R.id.simulator_dollar_btn)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testIfOpeningTheFormFragmentIsWorking() {
-        // Click on the "Add Property" button in the toolbar
-        onView(withId(R.id.action_add_property)).perform(click())
-
-        // Check if the FormFragment is displayed on the screen
-        onView(withId(R.id.form_fragment)).check(matches(isDisplayed()))
-    }
-
-    @Test
     @LargeTest
     fun testIftAddingANewPropertyIsWorking() {
-        Thread.sleep(5000)
+        Thread.sleep(2000)
         onView(withId(R.id.action_add_property)).perform(click())
-        Thread.sleep(5000)
+        Thread.sleep(2000)
 
         onView(withId(R.id.add_property_type)).perform(click())
-        onView(withText("Maison")).perform(click(), closeSoftKeyboard())
+        onView(withText(R.string.house)).perform(click(), closeSoftKeyboard())
 
         onView(withId(R.id.add_property_price)).perform(click())
         onView(withId(R.id.add_property_price)).perform(typeText("100000"), closeSoftKeyboard())
@@ -103,22 +164,17 @@ class RealEstateManagerInstrumentedTest {
         onView(withId(R.id.add_property_rooms)).perform(click())
         onView(withId(R.id.add_property_rooms)).perform(typeText("2"), closeSoftKeyboard())
 
-        onView(withId(R.id.add_property_photos)).perform(click())
-        onView(withText("Choisir depuis votre gallery")).perform(click())
-        onView(withText("bedroom_house.jpg")).perform(click())
-        onView(withId(android.R.id.edit)).perform(typeText("Room"), closeSoftKeyboard())
-        onView(withText("valider")).perform(click())
-
         onView(withId(R.id.add_property_desc)).perform(click())
         onView(withId(R.id.add_property_desc_editText)).perform(click())
         onView(withId(R.id.add_property_desc_editText)).perform(typeText("Une super description"), closeSoftKeyboard())
+        onView(withId(R.id.add_property_desc)).perform(click())
 
         onView(withId(R.id.add_property_proximity)).perform(click())
-        onView(withText("La mer")).perform(click(), closeSoftKeyboard())
+        onView(withText(R.string.sea)).perform(click(), closeSoftKeyboard())
 
         onView(withId(R.id.add_property_realEstate_agent)).perform(click())
         onView(withId(R.id.add_property_realEstate_agent)).perform(
-            typeText("Mr l'agent immobilier"),
+            typeText("Mr Patrick Agent"),
             closeSoftKeyboard()
         )
 
@@ -126,21 +182,86 @@ class RealEstateManagerInstrumentedTest {
         onView(withId(R.id.autocomplete_fragment)).perform(click())
 
         // Enter a search query into the AutocompleteSupportFragment
-        onView(withId(R.id.places_autocomplete_search_input))
+        onView(withId(R.id.places_autocomplete_search_bar))
             .perform(typeText("1600 Amphitheatre Parkway"), closeSoftKeyboard())
 
+        Thread.sleep(2000)
         // Select an address from the autocomplete suggestions
-        onView(withText("1600 Amphitheatre Parkway, Mountain View, CA, USA"))
-            .perform(click())
+        onView(withId(R.id.places_autocomplete_list)).perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
 
+        // Add the property to the list
+        onView(withId(R.id.add_property_btn)).perform(scrollTo())
         onView(withId(R.id.add_property_btn)).perform(click())
+
+        // Check if the list has one item now
+        onView(withId(R.id.properties_recycler_view))
+            .check(matches(hasMinimumChildCount(1)))
+
+        Thread.sleep(3000)
     }
 
     @Test
-    fun testIfOpeningTheDetailFragmentIsWorking() {
-        // Perform a click on the first item in the recycler view
-        onView(withId(R.id.properties_recycler_view))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+    fun testIfChangingCurrencyIsWorking() {
+        testingCreationOfPropertyInRoomDatabase()
+
+        // Click on the item
+        onView(withId(R.id.properties_recycler_view)).perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+
+        // Check that the detail page is open
+        onView(withId(R.id.details_property_price))
+            .check(matches(isDisplayed()))
+
+        // Check that the price is in USD
+        onView(withId(R.id.details_property_price))
+            .check(matches(withText("$100000")))
+
+        // Click on the arrow back
+        onView(withId(R.id.arrow_back_btn))
+            .perform(click())
+
+        // Click on the "Add Property" button in the toolbar and then convert btn
+        onView(withId(R.id.action_settings)).perform(click())
+        onView(withText(R.string.convert_currency)).perform(click())
+
+        // Click on the item
+        onView(withId(R.id.properties_recycler_view)).perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+
+        // Check that the detail page is open
+        onView(withId(R.id.details_property_price))
+            .check(matches(isDisplayed()))
+
+        // Check that the price is in USD
+        onView(withId(R.id.details_property_price))
+            .check(matches(withText("85000€")))
+    }
+
+
+    @Test
+    fun testIfTheDetailPageIsDisplayAndContainTheRightData() {
+        testingCreationOfPropertyInRoomDatabase()
+
+        // Click on the item
+        onView(withId(R.id.properties_recycler_view)).perform(
+            actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
 
         // Check that the detail page is open
         onView(withId(R.id.detail_page))
@@ -148,7 +269,42 @@ class RealEstateManagerInstrumentedTest {
 
         // Check that the information displayed on the detail page is the same as the information displayed on the first item in the recycler view
         onView(withId(R.id.details_property_desc))
-            .check(matches(withText("Title of first item")))
+            .check(matches(withText("Une super description")))
+    }
+
+    @Test
+    fun testIfTheSimulatorIsWorking() {
+        // Click on the "Add Property" button in the toolbar
+        onView(withId(R.id.action_settings)).perform(click())
+
+        // Click on the popup item
+        onView(withText(R.string.simulator)).perform(click())
+
+        // Check if the FormFragment is displayed on the screen
+        onView(withId(R.id.simulator_dollar_btn)).check(matches(isDisplayed()))
+
+        // Enter data for testing
+        onView(withId(R.id.simulator_amount_editText)).perform(click())
+        onView(withId(R.id.simulator_amount_editText)).perform(typeText("300000"), closeSoftKeyboard())
+        onView(withId(R.id.simulator_contribution_editText)).perform(click())
+        onView(withId(R.id.simulator_contribution_editText)).perform(typeText("20000"), closeSoftKeyboard())
+        onView(withId(R.id.simulator_rate_editText)).perform(click())
+        onView(withId(R.id.simulator_rate_editText)).perform(typeText("3"), closeSoftKeyboard())
+        onView(withId(R.id.simulator_duration_editText)).perform(click())
+        onView(withId(R.id.simulator_duration_editText)).perform(typeText("30"), closeSoftKeyboard())
+        onView(withId(R.id.simulator_simulate_btn)).perform(click())
+
+        // Check if the result textview is visible and contain the right data
+        onView(withId(R.id.simulator_result_textView)).check(matches(isDisplayed()))
+        onView(withId(R.id.simulator_result_textView))
+            .check(
+                matches(
+                    withText(
+                        context.getString(R.string.simulator_result_first_part) + "$424800 " + context.getString(R.string.simulator_result_second_part) + " " + "$1180 " +
+                                context.getString(R.string.simulator_result_third_part)
+                    )
+                )
+            )
     }
 
     @Test
@@ -191,8 +347,8 @@ class RealEstateManagerInstrumentedTest {
         val cursor = contentResolver.query(RealEstateManagerContentProvider.CONTENT_URI, projection, null, null, null)
 
         // Assert that the cursor is not null and contains the inserted property
-        assertNotNull(cursor)
-        cursor?.moveToFirst()?.let { assertTrue(it) }
+        Assert.assertNotNull(cursor)
+        cursor?.moveToFirst()?.let { Assert.assertTrue(it) }
 
         val id = cursor?.getLong(cursor.getColumnIndex("_id"))
         val type = cursor?.let { cursor.getString(it.getColumnIndex("type")) }

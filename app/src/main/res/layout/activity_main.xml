@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -20,27 +19,6 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/filter_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.FilterFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_filter" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/details_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.DetailsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_details" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/form_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.FormFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_form" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/property_list_fragment"

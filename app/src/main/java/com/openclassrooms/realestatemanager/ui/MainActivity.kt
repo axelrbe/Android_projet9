@@ -18,6 +18,7 @@ import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.fragments.FormFragment
 import com.openclassrooms.realestatemanager.fragments.MapFragment
+import com.openclassrooms.realestatemanager.fragments.PropertyListFragment
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.viewModel.CurrencyViewModel
 import com.openclassrooms.realestatemanager.viewModel.PropertyViewModel
@@ -48,10 +49,11 @@ class MainActivity : AppCompatActivity() {
         fragmentManager = (this as AppCompatActivity).supportFragmentManager
         currencyViewModel = ViewModelProvider(this)[CurrencyViewModel::class.java]
 
+        // No property alert management
         binding.noPropertyAddBtn?.setOnClickListener {
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, formFragment)
-                .addToBackStack("PropertyListFragment")
+                .addToBackStack(null)
                 .commit()
         }
 
@@ -71,14 +73,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Change language depends on the device
         val currentLocale = Locale.getDefault().language
         val config = resources.configuration
-        if (currentLocale == "en") {
-            config.setLocale(Locale.ENGLISH)
-        } else {
-            config.setLocale(Locale.FRENCH)
-        }
-        resources.updateConfiguration(config, resources.displayMetrics)
+        val newLocale = if (currentLocale == "en") Locale.ENGLISH else Locale.FRENCH
+        val newContext = this.createConfigurationContext(config)
+        config.setLocale(newLocale)
+        newContext.resources.updateConfiguration(config, newContext.resources.displayMetrics)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             val mapFragment = MapFragment()
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, mapFragment)
-                .addToBackStack("PropertyListFragment")
+                .addToBackStack(null)
                 .commit()
 
             changeToolbarButtons()
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         R.id.action_add_property -> {
             fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, formFragment)
-                .addToBackStack("PropertyListFragment")
+                .addToBackStack(null)
                 .commit()
 
             changeToolbarButtons()
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this, SimulatorActivity::class.java)
                         this.startActivity(intent)
                         val transaction = this.supportFragmentManager.beginTransaction()
-                        transaction.addToBackStack("PropertyListFragment")
+                        transaction.addToBackStack(null)
                         transaction.commit()
                         true
                     }
@@ -137,6 +138,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         android.R.id.home -> {
+            val tabletSize = resources.getBoolean(R.bool.isTablet)
+            if(!tabletSize) {
+                val propertyListFragment = PropertyListFragment()
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, propertyListFragment)
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+
             resetToolbar()
             true
         }
@@ -154,11 +167,10 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun resetToolbar() {
+    fun resetToolbar() {
         binding.toolbar.menu.findItem(R.id.action_map).isVisible = true
         binding.toolbar.menu.findItem(R.id.action_add_property).isVisible = true
         binding.toolbar.menu.findItem(R.id.action_settings).isVisible = true
-        fragmentManager.popBackStack()
         supportActionBar?.setHomeAsUpIndicator(R.drawable.icon_arrow_back)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }

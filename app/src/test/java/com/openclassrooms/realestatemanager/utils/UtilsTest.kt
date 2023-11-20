@@ -18,14 +18,14 @@ class UtilsTest {
     @Test
     fun testConvertDollarToEuro() {
         val dollars: Long = 100
-        val expectedEuros: Int = (dollars * 0.94345).roundToInt()
+        val expectedEuros: Int = (dollars * 0.85).roundToInt()
         val actualEuros: Int = Utils.convertDollarToEuro(dollars)
         Assertions.assertEquals(expectedEuros, actualEuros)
     }
     @Test
     fun testConvertEuroToDollar() {
         val euros = 100
-        val expectedDollars: Int = (euros * 1.32030).roundToInt()
+        val expectedDollars: Int = (euros * 1.18).roundToInt()
         val actualDollars: Int = Utils.convertEuroToDollar(euros)
         Assertions.assertEquals(expectedDollars, actualDollars)
     }

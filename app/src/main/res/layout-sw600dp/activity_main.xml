@@ -23,21 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/filter_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.FilterFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_filter" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/form_fragment"
-            android:name="com.openclassrooms.realestatemanager.fragments.FormFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_form" />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,13 +41,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2.2">
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/details_fragment"
-                    android:name="com.openclassrooms.realestatemanager.fragments.DetailsFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:layout="@layout/fragment_details" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/no_property_alert_container"

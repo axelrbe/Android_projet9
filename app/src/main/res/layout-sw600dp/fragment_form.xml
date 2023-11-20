@@ -9,8 +9,9 @@
     tools:context=".fragments.FormFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:padding="20dp">
 
@@ -90,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:orientation="horizontal">
 
                 <EditText
@@ -134,14 +135,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:layout_marginEnd="50dp">
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginTop="20dp">
 
                     <Button
                         android:id="@+id/add_property_proximity"
@@ -179,7 +182,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_marginTop="20dp">
 
                     <Button
                         android:id="@+id/add_property_desc"
@@ -229,6 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_border"
+                android:layout_marginTop="20dp"
                 app:backgroundTint="@null"
                 app:backgroundTintMode="add"
                 app:icon="@drawable/icon_photo"

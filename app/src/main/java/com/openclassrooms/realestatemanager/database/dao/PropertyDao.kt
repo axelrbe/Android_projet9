@@ -29,6 +29,9 @@ interface PropertyDao {
     @Delete
     suspend fun deleteProperty(property: Property)
 
+    @Query("SELECT * FROM properties ORDER BY id DESC LIMIT 1")
+    fun getLastProperty(): Property?
+
     @Query("SELECT * FROM properties WHERE (:type IS NULL OR type = :type) AND (:minSurface IS NULL OR surface >= :minSurface) AND (:maxSurface IS NULL OR surface <= :maxSurface) AND (:minPrice IS NULL OR price >= :minPrice) AND (:maxPrice IS NULL OR price <= :maxPrice) AND (:proximityPlaces IS NULL OR proximityPlaces = :proximityPlaces) AND (:status IS NULL OR status = :status) AND (:minPhotos IS NULL OR photos = :minPhotos)")
     fun getFilteredProperties(
         type: String?,

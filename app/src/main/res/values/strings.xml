@@ -95,4 +95,7 @@
     <string name="no_property_alert">Pas de biens en ventes, \n Ajouter en un vous-même !</string>
     <string name="create_property">Créer un bien</string>
     <string name="empty_fields_error_msg">Veuillez remplir tout les champs avant de valider !</string>
+    <string name="storage_permission_denied">Veuillez autoriser l\'accès à vos photos !</string>
+    <string name="camera_permission_denied">Veuillez autoriser l\'accès à votre camera pour prendre une photo !</string>
+    <string name="name_photo">Nom de la photo</string>
 </resources>
