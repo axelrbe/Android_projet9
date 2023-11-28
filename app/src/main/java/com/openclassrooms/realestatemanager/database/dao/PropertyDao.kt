@@ -32,15 +32,19 @@ interface PropertyDao {
     @Query("SELECT * FROM properties ORDER BY id DESC LIMIT 1")
     fun getLastProperty(): Property?
 
-    @Query("SELECT * FROM properties WHERE (:type IS NULL OR type = :type) AND (:minSurface IS NULL OR surface >= :minSurface) AND (:maxSurface IS NULL OR surface <= :maxSurface) AND (:minPrice IS NULL OR price >= :minPrice) AND (:maxPrice IS NULL OR price <= :maxPrice) AND (:proximityPlaces IS NULL OR proximityPlaces = :proximityPlaces) AND (:status IS NULL OR status = :status) AND (:minPhotos IS NULL OR photos = :minPhotos)")
+    @Query("SELECT * FROM properties " +
+            "WHERE (type = :type OR :type IS NULL) " +
+            "AND ((:minSurface IS NULL OR surface >= :minSurface) AND (:maxSurface IS NULL OR surface <= :maxSurface)) " +
+            "AND ((:minPrice IS NULL OR price >= :minPrice) AND (:maxPrice IS NULL OR price <= :maxPrice)) " +
+            "AND (status = :status OR :status IS NULL) " +
+            "AND (proximityPlaces IN (:proximityPlaces) OR :proximityPlaces IS NULL)")
     fun getFilteredProperties(
         type: String?,
-        minSurface: Int?,
-        maxSurface: Int?,
-        minPrice: Int?,
-        maxPrice: Int?,
+        minSurface: Long?,
+        maxSurface: Long?,
+        minPrice: Long?,
+        maxPrice: Long?,
         proximityPlaces: List<String>?,
-        status: String?,
-        minPhotos: Int?
+        status: String?
     ): List<Property>
 }

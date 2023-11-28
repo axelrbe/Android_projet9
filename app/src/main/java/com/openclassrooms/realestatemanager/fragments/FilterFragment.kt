@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.application.RealEstateApplication
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentFilterBinding
 
 
@@ -23,6 +25,7 @@ class FilterFragment : Fragment() {
     private val proximityPlacesSelectedItems = hashSetOf<String>()
     private lateinit var propertyListFragment: PropertyListFragment
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var propertyDao: PropertyDao
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterBinding.inflate(inflater, container, false)
         return binding.root
@@ -32,6 +35,7 @@ class FilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fragmentManager = (context as AppCompatActivity).supportFragmentManager
+        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
 
         propertyListFragment =
             parentFragmentManager.findFragmentById(R.id.property_list_fragment) as PropertyListFragment
@@ -47,24 +51,15 @@ class FilterFragment : Fragment() {
 
     private fun applyFilters() {
         val type = binding.filterTypeBtn.text.toString().takeIf { it.isNotEmpty() }
-        val minSurface = binding.filterSurfaceMin.text.toString().takeIf { it.isNotEmpty() }?.toInt()
-        val maxSurface = binding.filterSurfaceMax.text.toString().takeIf { it.isNotEmpty() }?.toInt()
-        val minPrice = binding.filterPriceMin.text.toString().takeIf { it.isNotEmpty() }?.toInt()
-        val maxPrice = binding.filterPriceMax.text.toString().takeIf { it.isNotEmpty() }?.toInt()
+        val minSurface = binding.filterSurfaceMin.text.toString().takeIf { it.isNotEmpty() }?.toLong()
+        val maxSurface = binding.filterSurfaceMax.text.toString().takeIf { it.isNotEmpty() }?.toLong()
+        val minPrice = binding.filterPriceMin.text.toString().takeIf { it.isNotEmpty() }?.toLong()
+        val maxPrice = binding.filterPriceMax.text.toString().takeIf { it.isNotEmpty() }?.toLong()
         val proximityPlaces = getFilteredProximityPlacesItems().takeIf { it.isNotEmpty() }
         val status = binding.filterStatus.text.toString().takeIf { it.isNotEmpty() }
-        val minPhotos = binding.filterPhotos.text.toString().takeIf { it.isNotEmpty() }?.toInt()
 
-        propertyListFragment.applyFilters(
-            type,
-            minSurface,
-            maxSurface,
-            minPrice,
-            maxPrice,
-            proximityPlaces,
-            status,
-            minPhotos
-        )
+        val filteredProperties = propertyDao.getFilteredProperties(type, minSurface, maxSurface, minPrice, maxPrice, proximityPlaces, status)
+        propertyListFragment.updatePropertyList(filteredProperties)
         fragmentManager.popBackStack()
     }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.PropertyAdapter
 import com.openclassrooms.realestatemanager.application.RealEstateApplication
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao
 import com.openclassrooms.realestatemanager.databinding.FragmentPropertyListBinding
 import com.openclassrooms.realestatemanager.models.Property
 import com.openclassrooms.realestatemanager.repositories.PropertyRepository
@@ -31,6 +32,7 @@ class PropertyListFragment : Fragment() {
     private lateinit var propertyViewModel: PropertyViewModel
     private lateinit var currencyViewModel: CurrencyViewModel
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var propertyDao: PropertyDao
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPropertyListBinding.inflate(inflater, container, false)
@@ -41,6 +43,7 @@ class PropertyListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        propertyDao = RealEstateApplication.getInstance(requireContext()).propertyDao()
         fragmentManager = (context as AppCompatActivity).supportFragmentManager
         propertyAdapter = PropertyAdapter(false)
 
@@ -93,28 +96,8 @@ class PropertyListFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    fun applyFilters(
-        type: String?,
-        minSurface: Int?,
-        maxSurface: Int?,
-        minPrice: Int?,
-        maxPrice: Int?,
-        proximityPlaces: List<String>?,
-        status: String?,
-        minPhotos: Int?
-    ) {
-        val filteredList = propertyList.filter { property ->
-            (type == null || property.type == type) &&
-                    (minSurface == null || property.surface >= minSurface) &&
-                    (maxSurface == null || property.surface <= maxSurface) &&
-                    (minPrice == null || property.price >= minPrice) &&
-                    (maxPrice == null || property.price <= maxPrice) &&
-                    (proximityPlaces == null || property.proximityPlaces == proximityPlaces) &&
-                    (status == null || property.status == status) &&
-                    (minPhotos == null || property.photos.size >= minPhotos)
-        }
-
-        propertyAdapter.submitList(filteredList)
+    fun updatePropertyList(filteredProperties: List<Property>) {
+        propertyAdapter.submitList(filteredProperties)
         binding.resetFilterBtn.visibility = View.VISIBLE
     }
 

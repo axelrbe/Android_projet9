@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:id="@+id/detail_page"
     tools:context=".fragments.DetailsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -26,16 +26,25 @@
             android:contentDescription="@string/back_main_activity_button"
             android:src="@drawable/icon_purple_arrow_back" />
 
+        <ImageButton
+            android:id="@+id/show_all_edit_icon_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/modify_data_icon"
+            android:src="@drawable/icon_modify_big_purple" />
+
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="30dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingStart="20dp"
             android:paddingEnd="20dp">
@@ -83,14 +92,33 @@
 
             </RelativeLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/add_property_desc"
-                android:textColor="@color/secondaryPurple"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/details_property_desc_edit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_property_desc"
+                    android:textColor="@color/secondaryPurple"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/save_desc_edit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/modify_data_icon"
+                    android:src="@drawable/icon_check_purple"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/details_property_desc"
@@ -108,15 +136,32 @@
                 android:background="@drawable/purple_rounded_background"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/real_estate_agent"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_property_real_estate_agent_edit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/real_estate_agent"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/save_real_estate_agent_edit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/modify_data_icon"
+                        android:src="@drawable/icon_check"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/details_property_real_estate_agent"
@@ -142,33 +187,69 @@
                         android:background="@drawable/purple_rounded_background"
                         android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/add_property_surface"
-                            android:textColor="@color/white"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/details_property_surface_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/add_property_surface"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/save_surface_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@android:color/transparent"
+                                android:contentDescription="@string/modify_data_icon"
+                                android:src="@drawable/icon_check"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/details_property_surface"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/add_property_surface"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/add_property_rooms"
-                            android:textColor="@color/white"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/details_property_rooms_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/add_property_rooms"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/save_rooms_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@android:color/transparent"
+                                android:contentDescription="@string/modify_data_icon"
+                                android:src="@drawable/icon_check"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/details_property_rooms"
@@ -188,14 +269,32 @@
                         android:background="@drawable/purple_rounded_background"
                         android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/add_property_price"
-                            android:textColor="@color/white"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/details_property_price_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/add_property_price"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/save_price_edit_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@android:color/transparent"
+                                android:contentDescription="@string/modify_data_icon"
+                                android:src="@drawable/icon_check"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/details_property_price"
@@ -229,22 +328,73 @@
 
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/add_property_proximity"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_property_proximity_places_edit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/add_property_proximity"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/save_proximity_places_edit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/modify_data_icon"
+                        android:src="@drawable/icon_check"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/add_new_proximity_place_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/add_proximity_place_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:autofillHints="Modify proximity places"
+                        android:backgroundTint="@color/white"
+                        android:gravity="center"
+                        android:hint="@string/add_proximity_place_hint"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white" />
+
+                    <ImageButton
+                        android:id="@+id/add_new_proximity_place_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/new_chip_desc"
+                        android:src="@drawable/icon_add" />
+
+                </LinearLayout>
+
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/details_proximity_places_chip_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
                     app:chipSpacing="3dp"
                     app:chipSpacingVertical="-5dp"
                     app:singleLine="false" />
@@ -255,7 +405,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/add_property_address"
                 android:textColor="@color/secondaryPurple"
                 android:textSize="22sp"
@@ -278,6 +428,45 @@
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/property_sold_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/property_sold_btn"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp">
+
+                <EditText
+                    android:id="@+id/property_sold_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="Property sold date"
+                    android:gravity="center"
+                    android:hint="@string/property_sold_date"
+                    android:inputType="date"
+                    android:visibility="gone"/>
+
+                <ImageButton
+                    android:id="@+id/property_sold_date_validation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/property_sold_date"
+                    android:src="@drawable/icon_check_purple"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -98,4 +98,11 @@
     <string name="storage_permission_denied">Veuillez autoriser l\'accès à vos photos !</string>
     <string name="camera_permission_denied">Veuillez autoriser l\'accès à votre camera pour prendre une photo !</string>
     <string name="name_photo">Nom de la photo</string>
+    <string name="modify_data_icon">Icône de modification d\'une propriété</string>
+    <string name="property_sold_btn">Marquer ce bien comme vendu</string>
+    <string name="property_sold_date">Indiquez la date de la vente \n (JJ/MM/AAAA)</string>
+    <string name="sold">Vendu</string>
+    <string name="on_the">le</string>
+    <string name="add_proximity_place_hint">Ajouter un lieu…</string>
+    <string name="new_chip_desc">Bouton pour ajouter un nouveau lieu</string>
 </resources>

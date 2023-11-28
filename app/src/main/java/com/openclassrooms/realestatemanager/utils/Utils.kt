@@ -1,8 +1,8 @@
 package com.openclassrooms.realestatemanager.utils
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,18 +42,17 @@ object Utils {
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     * @param context
      * @return
      */
-    fun isInternetConnected(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val network = connectivityManager.activeNetwork ?: return false
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(network) ?: return false
-
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    fun isInternetConnected(): Boolean {
+        return try {
+            val sock = Socket()
+            sock.connect(InetSocketAddress("8.8.8.8", 53), 1500)
+            sock.close()
+            true
+        } catch (e: IOException) {
+            false
+        }
     }
 
     fun calculateMonthlyPayment(

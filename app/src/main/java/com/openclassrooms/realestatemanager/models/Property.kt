@@ -14,17 +14,17 @@ import kotlinx.parcelize.Parcelize
 data class Property(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val type: String,
-    val price: Long,
-    val surface: Long,
-    val rooms: Int,
-    val desc: String,
+    var price: Long,
+    var surface: Long,
+    var rooms: Int,
+    var desc: String,
     val address: String,
     val location: LatLng?,
-    val proximityPlaces: List<String>,
-    val status: String,
+    var proximityPlaces: List<String>,
+    var status: String,
     val entryDate: String,
-    val soldDate: String,
-    val realEstateAgent: String,
+    var soldDate: String,
+    var realEstateAgent: String,
     @TypeConverters(Converters.PhotoListConverter::class)
     val photos: List<Photo>
 ) : Parcelable {

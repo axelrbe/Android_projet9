@@ -80,9 +80,18 @@ class PropertyAdapter(var isEuro: Boolean) :
             (currentProperty.rooms.toString() + " " + context.getString(R.string.rooms)).also {
                 holder.propertyItemRooms.text = it
             }
-            (context.getString(R.string.since) + " " + currentProperty.entryDate).also {
-                holder.propertyItemDate.text = it
+
+            val propertySold = ContextCompat.getString(context, R.string.sold)
+            if (currentProperty.status == propertySold) {
+                (context.getString(R.string.on_the) + " " + currentProperty.soldDate).also {
+                    holder.propertyItemDate.text = it
+                }
+            } else {
+                (context.getString(R.string.since) + " " + currentProperty.entryDate).also {
+                    holder.propertyItemDate.text = it
+                }
             }
+
             holder.propertyItemAddress.text = currentProperty.address
             holder.propertyItemStatus.text = currentProperty.status
 

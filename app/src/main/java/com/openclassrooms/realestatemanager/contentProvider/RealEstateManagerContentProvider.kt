@@ -42,13 +42,12 @@ class RealEstateManagerContentProvider : ContentProvider() {
     ): Cursor {
         val properties = propertyDao.getFilteredProperties(
             type = uri.getQueryParameter("type"),
-            minSurface = uri.getQueryParameter("minSurface")?.toIntOrNull(),
-            maxSurface = uri.getQueryParameter("maxSurface")?.toIntOrNull(),
-            minPrice = uri.getQueryParameter("minPrice")?.toIntOrNull(),
-            maxPrice = uri.getQueryParameter("maxPrice")?.toIntOrNull(),
+            minSurface = uri.getQueryParameter("minSurface")?.toLongOrNull(),
+            maxSurface = uri.getQueryParameter("maxSurface")?.toLongOrNull(),
+            minPrice = uri.getQueryParameter("minPrice")?.toLongOrNull(),
+            maxPrice = uri.getQueryParameter("maxPrice")?.toLongOrNull(),
             proximityPlaces = uri.getQueryParameter("proximityPlaces")?.split(","),
             status = uri.getQueryParameter("status"),
-            minPhotos = uri.getQueryParameter("minPhotos")?.toIntOrNull()
         )
         val cursor = MatrixCursor(
             arrayOf(

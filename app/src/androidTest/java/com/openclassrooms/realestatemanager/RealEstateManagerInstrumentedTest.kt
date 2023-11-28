@@ -8,7 +8,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -75,6 +74,7 @@ class RealEstateManagerInstrumentedTest {
             context, PropertyDatabase::class.java
         ).build()
         propertyDao = db.propertyDao()
+        adapter = PropertyAdapter(false)
 
         activityRule.scenario.onActivity { activity ->
             recyclerView = activity.findViewById(R.id.properties_recycler_view)
@@ -83,7 +83,6 @@ class RealEstateManagerInstrumentedTest {
             Log.d("photoUri", "photo uri is equal to: $uri")
             photo = Property.Photo(uri.toString(), "no photo found")
         }
-        adapter = PropertyAdapter(false)
     }
 
     @After
@@ -140,8 +139,7 @@ class RealEstateManagerInstrumentedTest {
 
     @Test
     fun testInternetConnection() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val isConnected = Utils.isInternetConnected(context)
+        val isConnected = Utils.isInternetConnected()
         assertEquals(true, isConnected)
     }
 

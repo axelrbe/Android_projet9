@@ -95,4 +95,14 @@
     <string name="no_property_alert">No property for sale, \n Add one yourself !</string>
     <string name="create_property">Create a property</string>
     <string name="empty_fields_error_msg">Please complete all fields before validating !</string>
+    <string name="storage_permission_denied">Please allow the access to your storage to select photos !</string>
+    <string name="camera_permission_denied">Please allow the access to your camera to select photos !</string>
+    <string name="name_photo">Name of the photo</string>
+    <string name="modify_data_icon">modify data icon</string>
+    <string name="property_sold_btn">Indicate that this property is sold</string>
+    <string name="property_sold_date">Indicate the sold date (DD/MM/YYYY)</string>
+    <string name="sold">Sold</string>
+    <string name="on_the">on the</string>
+    <string name="add_proximity_place_hint">Add a place…</string>
+    <string name="new_chip_desc">Add new proximity place button</string>
 </resources>

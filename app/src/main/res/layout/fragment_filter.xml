@@ -124,30 +124,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:drawablePadding="5dp"
-                android:text="@string/photos"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/icon_house" />
-
-            <EditText
-                android:id="@+id/filter_photos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autofillHints="type filters"
-                android:background="@drawable/bottom_border"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:hint="@string/min_photos_number"
-                android:inputType="number"
-                android:textColor="@color/white"
-                android:textColorHint="@color/grayedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:drawablePadding="5dp"
                 android:text="@string/add_property_surface"
                 android:textColor="@color/white"
                 android:textSize="20sp"
